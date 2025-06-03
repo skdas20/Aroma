@@ -161,13 +161,15 @@ export default function MenPage() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-gradient-to-br from-cream-50 to-golden-50 rounded-2xl p-6 shadow-lg border-2 border-golden-200 group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
               >
-                {/* Product Image */}
-                <div className="relative mb-4 overflow-hidden rounded-xl">                  <Image
-                    src={product.image}
+                {/* Product Image */}                <div className="relative mb-4 overflow-hidden rounded-xl">
+                  <Image
+                    src={product.image || `/perfume-${product.id}.jpg`}
                     alt={product.name}
                     width={300}
                     height={300}
-                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"onError={(e) => {
+                    unoptimized={product.image?.includes('bing.com')}
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                    onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       const parent = target.parentElement;
                       if (parent) {

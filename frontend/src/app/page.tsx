@@ -106,13 +106,13 @@ export default function Home() {
                 ))}
                 
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6 relative z-10">
-                  <span className="bg-gradient-to-r from-sky-700 via-primary-700 to-nature-700 bg-clip-text text-transparent drop-shadow-sm">
+                  <span className="bg-gradient-to-r from-sky-800 via-primary-800 to-nature-800 bg-clip-text text-transparent drop-shadow-lg">
                     Discover
                   </span>
                   <br />
                   <span className="text-primary-800">Your Perfect</span>
                   <br />
-                  <span className="bg-gradient-to-r from-golden-500 via-sunshine-500 to-golden-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-golden-600 via-sunshine-600 to-golden-700 bg-clip-text text-transparent drop-shadow-lg">
                     Fragrance
                   </span>
                 </h1>

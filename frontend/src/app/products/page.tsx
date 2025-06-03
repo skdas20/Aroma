@@ -167,13 +167,15 @@ function ProductsWithSearchParams() {
                   className="bg-gradient-to-br from-cream-50 to-golden-50 rounded-2xl shadow-xl overflow-hidden border-2 border-golden-200 hover:border-golden-400 transition-all group"
                 >                  {/* Product Image */}
                   <div className="relative h-64 bg-gradient-to-br from-sky-100 to-nature-100 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="w-full h-full flex items-center justify-center p-4">                      <Image
-                        src={product.image}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>                    <div className="w-full h-full flex items-center justify-center p-4">
+                      <Image
+                        src={product.image || `/perfume-${product.id}.jpg`}
                         alt={product.name}
                         width={200}
                         height={200}
-                        className="object-cover w-full h-full rounded-lg"onError={(e) => {
+                        className="object-cover w-full h-full rounded-lg"
+                        unoptimized={product.image?.includes('bing.com')}
+                        onError={(e) => {
                           // Fallback to emoji if image doesn't exist
                           const target = e.target as HTMLImageElement;
                           const parent = target.parentElement;
