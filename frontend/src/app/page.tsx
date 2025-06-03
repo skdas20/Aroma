@@ -66,11 +66,12 @@ export default function Home() {
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
+              className="order-2 lg:order-1"
             >
               <div className="relative">
                 {/* Spray particles that appear around the text */}
@@ -105,7 +106,7 @@ export default function Home() {
                 ))}
                 
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6 relative z-10">
-                  <span className="bg-gradient-to-r from-sky-600 via-primary-600 to-nature-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-sky-700 via-primary-700 to-nature-700 bg-clip-text text-transparent drop-shadow-sm">
                     Discover
                   </span>
                   <br />
@@ -148,10 +149,13 @@ export default function Home() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="hidden lg:block relative"
+              className="relative order-1 lg:order-2"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-golden-200/30 via-sky-200/30 to-nature-200/30 rounded-3xl blur-3xl"></div>
-              <PerfumeBottle3D />
+              {/* Desktop: Full size, Mobile: Smaller and positioned above text */}
+              <div className="lg:h-96 h-64 flex items-center justify-center">
+                <PerfumeBottle3D />
+              </div>
             </motion.div>
           </div>
         </div>

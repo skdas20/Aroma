@@ -134,14 +134,14 @@ const LoadingAnimation = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.8 }}
           className="mb-6"
-        >          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-golden-600 via-nature-600 to-sky-600 bg-clip-text text-transparent mb-2">
+        >          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-golden-700 via-nature-700 to-sky-700 bg-clip-text text-transparent mb-2 drop-shadow-sm">
             Amaraa Luxury
           </h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5, duration: 0.8 }}
-            className="text-lg md:text-xl text-primary-700 font-light tracking-wide"
+            className="text-lg md:text-xl text-primary-800 font-medium tracking-wide"
           >
             Exquisite Fragrances Collection
           </motion.p>

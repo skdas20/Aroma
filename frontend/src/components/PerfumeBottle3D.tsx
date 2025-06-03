@@ -29,7 +29,7 @@ function PerfumeModel() {
 
 export default function PerfumeBottle3D() {
   return (
-    <div className="w-full h-[400px] md:h-[500px]">
+    <div className="w-full h-64 lg:h-[400px] xl:h-[500px]">
       <Canvas 
         camera={{ position: [3, 2, 5], fov: 45 }}
         gl={{ antialias: true, alpha: true }}
