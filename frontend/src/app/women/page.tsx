@@ -65,25 +65,10 @@ export default function WomenPage() {
       alert('Failed to add to cart. Please try again.');
     }
   };
-
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.brand.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortBy) {
-      case 'price-low':
-        return a.price - b.price;
-      case 'price-high':
-        return b.price - a.price;
-      case 'rating':
-        return b.rating - a.rating;
-      case 'name':
-      default:
-        return a.name.localeCompare(b.name);
-    }
-  });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
