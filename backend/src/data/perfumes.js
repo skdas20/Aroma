@@ -6,8 +6,12 @@ const perfumes = [
     category: "Women",
     price: 89.99,
     originalPrice: 120.00,
-    image: "/api/placeholder/300/400",
-    images: ["/api/placeholder/300/400", "/api/placeholder/300/400", "/api/placeholder/300/400"],
+    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1588405748880-12d1d2a59d32?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1595425970377-c9703cf48b6f?w=400&h=500&fit=crop"
+    ],
     description: "A captivating blend of Bulgarian rose, vanilla, and sandalwood. Perfect for romantic evenings.",
     notes: {
       top: ["Rose Petals", "Bergamot", "Pink Pepper"],
@@ -26,8 +30,11 @@ const perfumes = [
     category: "Men",
     price: 75.99,
     originalPrice: 95.00,
-    image: "/api/placeholder/300/400",
-    images: ["/api/placeholder/300/400", "/api/placeholder/300/400"],
+    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=500&fit=crop"
+    ],
     description: "Fresh aquatic scent with citrus top notes and woody base. Ideal for daily wear.",
     notes: {
       top: ["Sea Salt", "Lime", "Grapefruit"],
@@ -46,8 +53,12 @@ const perfumes = [
     category: "Unisex",
     price: 110.99,
     originalPrice: 140.00,
-    image: "/api/placeholder/300/400",
-    images: ["/api/placeholder/300/400", "/api/placeholder/300/400", "/api/placeholder/300/400"],
+    image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=500&fit=crop"
+    ],
     description: "Warm and sophisticated with amber, oud, and spices. A luxurious evening fragrance.",
     notes: {
       top: ["Saffron", "Cardamom", "Orange Blossom"],
@@ -58,16 +69,15 @@ const perfumes = [
     stock: 12,
     rating: 4.9,
     reviews: 67
-  },
-  {
+  },  {
     id: 4,
     name: "Fresh Garden",
     brand: "Aroma Natural",
     category: "Women",
     price: 65.99,
     originalPrice: 85.00,
-    image: "/api/placeholder/300/400",
-    images: ["/api/placeholder/300/400"],
+    image: "https://images.unsplash.com/photo-1623941354787-b2b2d51e8ccf?w=400&h=500&fit=crop",
+    images: ["https://images.unsplash.com/photo-1623941354787-b2b2d51e8ccf?w=400&h=500&fit=crop"],
     description: "Light and refreshing with green notes and white flowers. Perfect for spring and summer.",
     notes: {
       top: ["Green Leaves", "Cucumber", "Lemon"],
@@ -78,16 +88,18 @@ const perfumes = [
     stock: 30,
     rating: 4.5,
     reviews: 156
-  },
-  {
+  },  {
     id: 5,
     name: "Dark Knight",
     brand: "Aroma Intense",
     category: "Men",
     price: 95.99,
     originalPrice: 125.00,
-    image: "/api/placeholder/300/400",
-    images: ["/api/placeholder/300/400", "/api/placeholder/300/400"],
+    image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=400&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=400&h=500&fit=crop"
+    ],
     description: "Bold and masculine with tobacco, leather, and dark woods. For the confident man.",
     notes: {
       top: ["Black Pepper", "Ginger", "Elemi"],
@@ -106,8 +118,11 @@ const perfumes = [
     category: "Unisex",
     price: 55.99,
     originalPrice: 70.00,
-    image: "/api/placeholder/300/400",
-    images: ["/api/placeholder/300/400", "/api/placeholder/300/400"],
+    image: "https://images.unsplash.com/photo-1577933842346-d32bb5d2915c?w=400&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1577933842346-d32bb5d2915c?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1629198735930-c4039ef60b5d?w=400&h=500&fit=crop"
+    ],
     description: "Energizing citrus blend perfect for morning wear. Uplifting and invigorating.",
     notes: {
       top: ["Lemon", "Orange", "Grapefruit"],
