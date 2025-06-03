@@ -110,9 +110,8 @@ export default function CartPage() {
                 >
                   <div className="flex items-center space-x-6">
                     {/* Product Image */}
-                    <div className="w-20 h-20 bg-gradient-to-br from-golden-300 to-golden-500 rounded-xl flex items-center justify-center flex-shrink-0 relative overflow-hidden">
-                      <Image
-                        src={`/perfume-${(item.id % 6) + 1}.jpg`}
+                    <div className="w-20 h-20 bg-gradient-to-br from-golden-300 to-golden-500 rounded-xl flex items-center justify-center flex-shrink-0 relative overflow-hidden">                      <Image
+                        src={item.image}
                         alt={item.name}
                         width={80}
                         height={80}

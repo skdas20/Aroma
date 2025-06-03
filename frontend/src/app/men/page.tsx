@@ -39,7 +39,6 @@ export default function MenPage() {
   useEffect(() => {
     fetchProducts();
   }, [searchTerm, sortBy]);
-
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -50,99 +49,13 @@ export default function MenPage() {
       const data = await api.getProducts(params);
       if (data.success) {
         setProducts(data.products);
-      } else {
-        // Fallback to mock data
-        const mockProducts = generateMockProducts().filter(p => p.category === 'Men');
-        setProducts(mockProducts);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-      // Fallback to mock data
-      const mockProducts = generateMockProducts().filter(p => p.category === 'Men');
-      setProducts(mockProducts);
     } finally {
       setLoading(false);
     }
   };
-
-  const generateMockProducts = (): Product[] => [
-    {
-      id: 1,
-      name: "Midnight Explorer",
-      brand: "AMARAA",
-      category: "Men",
-      price: 129.99,
-      originalPrice: 159.99,
-      image: "/perfume-1.jpg",
-      description: "A bold and sophisticated fragrance for the modern gentleman",
-      notes: {
-        top: ["Bergamot", "Black Pepper", "Pink Pepper"],
-        middle: ["Cedar", "Lavender", "Geranium"],
-        base: ["Vetiver", "Patchouli", "Amber"]
-      },
-      size: "100ml",
-      stock: 25,
-      rating: 4.8,
-      reviews: 342
-    },
-    {
-      id: 2,
-      name: "Urban Legend",
-      brand: "AMARAA",
-      category: "Men",
-      price: 149.99,
-      originalPrice: 179.99,
-      image: "/perfume-2.jpg",
-      description: "Dynamic and energetic scent for the urban adventurer",
-      notes: {
-        top: ["Lemon", "Grapefruit", "Marine Notes"],
-        middle: ["Juniper", "Bay Leaves", "Jasmine"],
-        base: ["Cedarwood", "Ambergris", "Musk"]
-      },
-      size: "100ml",
-      stock: 18,
-      rating: 4.6,
-      reviews: 287
-    },
-    {
-      id: 3,
-      name: "Royal Oud",
-      brand: "AMARAA",
-      category: "Men",
-      price: 199.99,
-      originalPrice: 249.99,
-      image: "/perfume-3.jpg",
-      description: "Luxurious oud blend for the distinguished gentleman",
-      notes: {
-        top: ["Rose", "Saffron", "Cardamom"],
-        middle: ["Oud", "Sandalwood", "Patchouli"],
-        base: ["Amber", "Musk", "Vanilla"]
-      },
-      size: "100ml",
-      stock: 12,
-      rating: 4.9,
-      reviews: 198
-    },
-    {
-      id: 4,
-      name: "Sporty Fresh",
-      brand: "AMARAA",
-      category: "Men",
-      price: 99.99,
-      originalPrice: 119.99,
-      image: "/perfume-4.jpg",
-      description: "Fresh and invigorating scent for active lifestyles",
-      notes: {
-        top: ["Mint", "Eucalyptus", "Citrus"],
-        middle: ["Sea Breeze", "Cucumber", "Green Tea"],
-        base: ["White Musk", "Cedar", "Oakmoss"]
-      },
-      size: "100ml",
-      stock: 35,
-      rating: 4.4,
-      reviews: 421
-    }
-  ];
   const handleAddToCart = async (product: Product) => {
     try {
       await addToCart(product.id, 1);
@@ -249,13 +162,12 @@ export default function MenPage() {
                 className="bg-gradient-to-br from-cream-50 to-golden-50 rounded-2xl p-6 shadow-lg border-2 border-golden-200 group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
               >
                 {/* Product Image */}
-                <div className="relative mb-4 overflow-hidden rounded-xl">
-                  <Image
-                    src={`/perfume-${(product.id % 6) + 1}.jpg`}
+                <div className="relative mb-4 overflow-hidden rounded-xl">                  <Image
+                    src={product.image}
                     alt={product.name}
                     width={300}
                     height={300}
-                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"                    onError={(e) => {
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       const parent = target.parentElement;
                       if (parent) {

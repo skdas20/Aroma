@@ -39,7 +39,6 @@ export default function WomenPage() {
   useEffect(() => {
     fetchProducts();
   }, [searchTerm, sortBy]);
-
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -50,137 +49,13 @@ export default function WomenPage() {
       const data = await api.getProducts(params);
       if (data.success) {
         setProducts(data.products);
-      } else {
-        // Fallback to mock data
-        const mockProducts = generateMockProducts().filter(p => p.category === 'Women');
-        setProducts(mockProducts);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-      // Fallback to mock data
-      const mockProducts = generateMockProducts().filter(p => p.category === 'Women');
-      setProducts(mockProducts);
     } finally {
       setLoading(false);
     }
   };
-
-  const generateMockProducts = (): Product[] => [
-    {
-      id: 11,
-      name: "Rose Garden",
-      brand: "AMARAA",
-      category: "Women",
-      price: 139.99,
-      originalPrice: 169.99,
-      image: "/perfume-1.jpg",
-      description: "Elegant floral bouquet for the sophisticated woman",
-      notes: {
-        top: ["Rose Petals", "Pink Pepper", "Bergamot"],
-        middle: ["Peony", "Jasmine", "Magnolia"],
-        base: ["White Musk", "Sandalwood", "Amber"]
-      },
-      size: "100ml",
-      stock: 22,
-      rating: 4.9,
-      reviews: 428
-    },
-    {
-      id: 12,
-      name: "Velvet Dreams",
-      brand: "AMARAA",
-      category: "Women",
-      price: 159.99,
-      originalPrice: 189.99,
-      image: "/perfume-2.jpg",
-      description: "Luxurious and sensual fragrance for evening elegance",
-      notes: {
-        top: ["Black Currant", "Pear", "Pink Pepper"],
-        middle: ["Bulgarian Rose", "Plum", "Vanilla Orchid"],
-        base: ["Patchouli", "Vanilla", "Praline"]
-      },
-      size: "100ml",
-      stock: 15,
-      rating: 4.8,
-      reviews: 356
-    },
-    {
-      id: 13,
-      name: "Ocean Breeze",
-      brand: "AMARAA",
-      category: "Women",
-      price: 119.99,
-      originalPrice: 149.99,
-      image: "/perfume-3.jpg",
-      description: "Fresh and aquatic scent inspired by coastal winds",
-      notes: {
-        top: ["Sea Salt", "Lemon", "Cucumber"],
-        middle: ["Water Lily", "Freesia", "Lotus"],
-        base: ["White Musk", "Driftwood", "Ambergris"]
-      },
-      size: "100ml",
-      stock: 28,
-      rating: 4.6,
-      reviews: 298
-    },
-    {
-      id: 14,
-      name: "Golden Hour",
-      brand: "AMARAA",
-      category: "Women",
-      price: 179.99,
-      originalPrice: 219.99,
-      image: "/perfume-4.jpg",
-      description: "Warm and radiant fragrance capturing sunset's beauty",
-      notes: {
-        top: ["Mandarin", "Saffron", "Pink Grapefruit"],
-        middle: ["Tuberose", "Orange Blossom", "Ylang-Ylang"],
-        base: ["Amber", "Vanilla", "Honey"]
-      },
-      size: "100ml",
-      stock: 19,
-      rating: 4.9,
-      reviews: 412
-    },
-    {
-      id: 15,
-      name: "Cherry Blossom",
-      brand: "AMARAA",
-      category: "Women",
-      price: 129.99,
-      originalPrice: 159.99,
-      image: "/perfume-5.jpg",
-      description: "Delicate and romantic scent of spring blossoms",
-      notes: {
-        top: ["Cherry Blossom", "Peach", "Green Leaves"],
-        middle: ["Sakura", "Violet", "Lily of the Valley"],
-        base: ["White Musk", "Blonde Woods", "Sheer Musk"]
-      },
-      size: "100ml",
-      stock: 31,
-      rating: 4.7,
-      reviews: 389
-    },
-    {
-      id: 16,
-      name: "Midnight Mystique",
-      brand: "AMARAA",
-      category: "Women",
-      price: 169.99,
-      originalPrice: 199.99,
-      image: "/perfume-6.jpg",
-      description: "Mysterious and alluring fragrance for the confident woman",
-      notes: {
-        top: ["Black Cherry", "Rum", "Almond"],
-        middle: ["Turkish Rose", "Jasmine Sambac", "Plum"],
-        base: ["Tonka Bean", "Vanilla", "Dark Chocolate"]
-      },
-      size: "100ml",
-      stock: 17,
-      rating: 4.8,
-      reviews: 323
-    }
-  ];
   const handleAddToCart = async (product: Product) => {
     try {
       await addToCart(product.id, 1);
@@ -195,6 +70,20 @@ export default function WomenPage() {
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.brand.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'rating':
+        return b.rating - a.rating;
+      case 'name':
+      default:
+        return a.name.localeCompare(b.name);
+    }
+  });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
@@ -287,13 +176,12 @@ export default function WomenPage() {
                 className="bg-gradient-to-br from-cream-50 to-golden-50 rounded-2xl p-6 shadow-lg border-2 border-golden-200 group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
               >
                 {/* Product Image */}
-                <div className="relative mb-4 overflow-hidden rounded-xl">
-                  <Image
-                    src={`/perfume-${(product.id % 6) + 1}.jpg`}
+                <div className="relative mb-4 overflow-hidden rounded-xl">                  <Image
+                    src={product.image}
                     alt={product.name}
                     width={300}
                     height={300}
-                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"                    onError={(e) => {
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       const parent = target.parentElement;
                       if (parent) {

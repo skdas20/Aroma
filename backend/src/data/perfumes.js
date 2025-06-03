@@ -76,8 +76,11 @@ const perfumes = [
     category: "Women",
     price: 65.99,
     originalPrice: 85.00,
-    image: "https://images.unsplash.com/photo-1623941354787-b2b2d51e8ccf?w=400&h=500&fit=crop",
-    images: ["https://images.unsplash.com/photo-1623941354787-b2b2d51e8ccf?w=400&h=500&fit=crop"],
+    image: "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=400&h=500&fit=crop",
+    images: [
+      "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1606107557141-4e5ed22b54b6?w=400&h=500&fit=crop"
+    ],
     description: "Light and refreshing with green notes and white flowers. Perfect for spring and summer.",
     notes: {
       top: ["Green Leaves", "Cucumber", "Lemon"],
@@ -110,18 +113,17 @@ const perfumes = [
     stock: 8,
     rating: 4.7,
     reviews: 93
-  },
-  {
+  },  {
     id: 6,
     name: "Citrus Burst",
     brand: "Aroma Fresh",
     category: "Unisex",
     price: 55.99,
     originalPrice: 70.00,
-    image: "https://images.unsplash.com/photo-1577933842346-d32bb5d2915c?w=400&h=500&fit=crop",
+    image: "https://images.unsplash.com/photo-1570554886111-e80fcac6c51d?w=400&h=500&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1577933842346-d32bb5d2915c?w=400&h=500&fit=crop",
-      "https://images.unsplash.com/photo-1629198735930-c4039ef60b5d?w=400&h=500&fit=crop"
+      "https://images.unsplash.com/photo-1570554886111-e80fcac6c51d?w=400&h=500&fit=crop",
+      "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=500&fit=crop"
     ],
     description: "Energizing citrus blend perfect for morning wear. Uplifting and invigorating.",
     notes: {
