@@ -112,11 +112,9 @@ const CheckoutPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-golden-50 to-nature-50">
-      <Header />
-
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <Header />      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 space-y-4 md:space-y-0">
           <Link href="/cart">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -126,25 +124,23 @@ const CheckoutPage = () => {
               <span>Back to Cart</span>
             </motion.button>
           </Link>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-golden-600 to-nature-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-golden-600 to-nature-600 bg-clip-text text-transparent">
             Checkout
           </h1>
-        </div>
-
-        {/* Progress Steps */}
+        </div>        {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-center space-x-4">
+          <div className="flex items-center justify-center space-x-2 md:space-x-4">
             {[1, 2, 3, 4].map((stepNum) => (
               <div key={stepNum} className="flex items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
+                <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm md:text-base ${
                   step >= stepNum 
                     ? 'bg-gradient-to-r from-golden-500 to-golden-600 text-white' 
                     : 'bg-gray-200 text-gray-500'
                 }`}>
-                  {step > stepNum ? <CheckCircle className="w-6 h-6" /> : stepNum}
+                  {step > stepNum ? <CheckCircle className="w-4 h-4 md:w-6 md:h-6" /> : stepNum}
                 </div>
                 {stepNum < 4 && (
-                  <div className={`w-16 h-1 mx-2 ${
+                  <div className={`w-8 md:w-16 h-1 mx-1 md:mx-2 ${
                     step > stepNum ? 'bg-golden-500' : 'bg-gray-200'
                   }`} />
                 )}
@@ -152,11 +148,11 @@ const CheckoutPage = () => {
             ))}
           </div>
           <div className="flex justify-center mt-4">
-            <div className="flex space-x-20 text-sm text-primary-600">
+            <div className="flex space-x-8 md:space-x-20 text-xs md:text-sm text-primary-600">
               <span className={step >= 1 ? 'text-golden-600 font-semibold' : ''}>Address</span>
-              <span className={step >= 2 ? 'text-golden-600 font-semibold' : ''}>Time Slot</span>
+              <span className={step >= 2 ? 'text-golden-600 font-semibold' : ''}>Time</span>
               <span className={step >= 3 ? 'text-golden-600 font-semibold' : ''}>Payment</span>
-              <span className={step >= 4 ? 'text-golden-600 font-semibold' : ''}>Confirmation</span>
+              <span className={step >= 4 ? 'text-golden-600 font-semibold' : ''}>Done</span>
             </div>
           </div>
         </div>
@@ -165,15 +161,14 @@ const CheckoutPage = () => {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Step 1: Delivery Address */}
-            {step === 1 && (
-              <motion.div
+            {step === 1 && (              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-golden-200"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-4 md:p-6 border border-golden-200"
               >
                 <div className="flex items-center space-x-3 mb-6">
-                  <MapPin className="w-6 h-6 text-golden-600" />
-                  <h2 className="text-2xl font-bold text-primary-800">Delivery Address</h2>
+                  <MapPin className="w-5 h-5 md:w-6 md:h-6 text-golden-600" />
+                  <h2 className="text-xl md:text-2xl font-bold text-primary-800">Delivery Address</h2>
                 </div>
 
                 <form onSubmit={handleAddressSubmit} className="space-y-4">
@@ -271,18 +266,16 @@ const CheckoutPage = () => {
                   </motion.button>
                 </form>
               </motion.div>
-            )}
-
-            {/* Step 2: Time Slot Selection */}
+            )}            {/* Step 2: Time Slot Selection */}
             {step === 2 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-golden-200"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-4 md:p-6 border border-golden-200"
               >
                 <div className="flex items-center space-x-3 mb-6">
-                  <Clock className="w-6 h-6 text-golden-600" />
-                  <h2 className="text-2xl font-bold text-primary-800">Select Delivery Time</h2>
+                  <Clock className="w-5 h-5 md:w-6 md:h-6 text-golden-600" />
+                  <h2 className="text-xl md:text-2xl font-bold text-primary-800">Select Delivery Time</h2>
                 </div>
 
                 <div className="space-y-3 mb-6">
@@ -290,7 +283,7 @@ const CheckoutPage = () => {
                     <motion.div
                       key={slot.id}
                       whileHover={slot.available ? { scale: 1.02 } : {}}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                      className={`p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         selectedTimeSlot === slot.id
                           ? 'border-golden-500 bg-golden-50'
                           : slot.available
@@ -300,12 +293,12 @@ const CheckoutPage = () => {
                       onClick={() => slot.available && setSelectedTimeSlot(slot.id)}
                     >
                       <div className="flex items-center justify-between">
-                        <span className={`font-medium ${
+                        <span className={`font-medium text-sm md:text-base ${
                           slot.available ? 'text-primary-800' : 'text-gray-500'
                         }`}>
                           {slot.time}
                         </span>
-                        <span className={`text-sm ${
+                        <span className={`text-xs md:text-sm ${
                           slot.available ? 'text-green-600' : 'text-red-500'
                         }`}>
                           {slot.available ? 'Available' : 'Not Available'}
@@ -315,7 +308,7 @@ const CheckoutPage = () => {
                   ))}
                 </div>
 
-                <div className="flex space-x-4">
+                <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setStep(1)}
@@ -333,18 +326,16 @@ const CheckoutPage = () => {
                   </motion.button>
                 </div>
               </motion.div>
-            )}
-
-            {/* Step 3: Payment Method */}
+            )}            {/* Step 3: Payment Method */}
             {step === 3 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-golden-200"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-4 md:p-6 border border-golden-200"
               >
                 <div className="flex items-center space-x-3 mb-6">
-                  <CreditCard className="w-6 h-6 text-golden-600" />
-                  <h2 className="text-2xl font-bold text-primary-800">Payment Method</h2>
+                  <CreditCard className="w-5 h-5 md:w-6 md:h-6 text-golden-600" />
+                  <h2 className="text-xl md:text-2xl font-bold text-primary-800">Payment Method</h2>
                 </div>
 
                 <form onSubmit={handlePaymentSubmit} className="space-y-4">
@@ -425,9 +416,7 @@ const CheckoutPage = () => {
                         </div>
                       </div>
                     </motion.div>
-                  )}
-
-                  <div className="flex space-x-4 mt-6">
+                  )}                  <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 mt-6">
                     <motion.button
                       type="button"
                       whileHover={{ scale: 1.02 }}
@@ -447,27 +436,25 @@ const CheckoutPage = () => {
                   </div>
                 </form>
               </motion.div>
-            )}
-
-            {/* Step 4: Order Confirmation */}
+            )}            {/* Step 4: Order Confirmation */}
             {step === 4 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-golden-200 text-center"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 md:p-8 border border-golden-200 text-center"
               >
-                <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle className="w-10 h-10 text-white" />
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-white" />
                 </div>
                 
-                <h2 className="text-3xl font-bold text-primary-800 mb-4">Order Confirmed!</h2>
-                <p className="text-lg text-primary-600 mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold text-primary-800 mb-4">Order Confirmed!</h2>
+                <p className="text-base md:text-lg text-primary-600 mb-6">
                   Thank you for your order. Your order ID is <span className="font-bold text-golden-600">#{orderId}</span>
                 </p>
                 
-                <div className="bg-golden-50 rounded-lg p-6 mb-6">
+                <div className="bg-golden-50 rounded-lg p-4 md:p-6 mb-6">
                   <h3 className="font-semibold text-primary-800 mb-4">Order Details</h3>
-                  <div className="space-y-2 text-left">
+                  <div className="space-y-2 text-left text-sm md:text-base">
                     <div className="flex justify-between">
                       <span>Delivery Address:</span>
                       <span className="text-right">{deliveryAddress.address}, {deliveryAddress.city}</span>
@@ -483,7 +470,7 @@ const CheckoutPage = () => {
                   </div>
                 </div>
 
-                <div className="flex space-x-4">
+                <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
                   <Link href="/products" className="flex-1">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
@@ -503,48 +490,46 @@ const CheckoutPage = () => {
                 </div>
               </motion.div>
             )}
-          </div>
-
-          {/* Order Summary Sidebar */}
+          </div>          {/* Order Summary Sidebar */}
           {step < 4 && (
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 order-first lg:order-last">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-golden-200 sticky top-24"
+                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-4 md:p-6 border border-golden-200 lg:sticky lg:top-24 mb-6 lg:mb-0"
               >
-                <h3 className="text-xl font-bold text-primary-800 mb-4">Order Summary</h3>
+                <h3 className="text-lg md:text-xl font-bold text-primary-800 mb-4">Order Summary</h3>
                 
                 <div className="space-y-3 mb-6">
                   {cart.items.map((item) => (
                     <div key={item.id} className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-golden-100 to-nature-100 rounded-lg flex items-center justify-center">
-                        <span className="text-golden-700">🧴</span>
+                      <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-golden-100 to-nature-100 rounded-lg flex items-center justify-center">
+                        <span className="text-golden-700 text-sm md:text-base">🧴</span>
                       </div>
                       <div className="flex-1">
                         <div className="font-medium text-primary-800 text-sm">{item.name}</div>
                         <div className="text-primary-600 text-xs">Qty: {item.quantity}</div>
                       </div>
-                      <div className="font-semibold text-primary-800">${(item.price * item.quantity).toFixed(2)}</div>
+                      <div className="font-semibold text-primary-800 text-sm">${(item.price * item.quantity).toFixed(2)}</div>
                     </div>
                   ))}
                 </div>
 
                 <div className="border-t border-golden-200 pt-4 space-y-2">
-                  <div className="flex justify-between text-primary-700">
+                  <div className="flex justify-between text-primary-700 text-sm">
                     <span>Subtotal</span>
                     <span>${cart.summary.subtotal.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-primary-700">
+                  <div className="flex justify-between text-primary-700 text-sm">
                     <span>Shipping</span>
                     <span>{cart.summary.shipping === 0 ? 'Free' : `$${cart.summary.shipping.toFixed(2)}`}</span>
                   </div>
-                  <div className="flex justify-between text-primary-700">
+                  <div className="flex justify-between text-primary-700 text-sm">
                     <span>Tax</span>
                     <span>${cart.summary.tax.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-golden-200 pt-2">
-                    <div className="flex justify-between text-xl font-bold text-primary-800">
+                    <div className="flex justify-between text-lg md:text-xl font-bold text-primary-800">
                       <span>Total</span>
                       <span>${cart.summary.total.toFixed(2)}</span>
                     </div>
@@ -553,8 +538,8 @@ const CheckoutPage = () => {
 
                 <div className="mt-6 p-3 bg-green-50 rounded-lg border border-green-200">
                   <div className="flex items-center space-x-2">
-                    <Shield className="w-5 h-5 text-green-600" />
-                    <span className="text-sm text-green-700 font-medium">Secure Checkout</span>
+                    <Shield className="w-4 h-4 md:w-5 md:h-5 text-green-600" />
+                    <span className="text-xs md:text-sm text-green-700 font-medium">Secure Checkout</span>
                   </div>
                 </div>
               </motion.div>

@@ -155,22 +155,20 @@ export default function ChatBot() {
       </motion.button>
 
       {/* Chat Window */}
-      <AnimatePresence>
-        {isOpen && (
+      <AnimatePresence>        {isOpen && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 100 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 100 }}
-            className="fixed bottom-6 right-6 w-96 h-[600px] bg-gradient-to-br from-cream-50 to-golden-50 rounded-2xl shadow-2xl z-50 flex flex-col border-2 border-golden-200"
-          >
-            {/* Header */}
-            <div className="bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 p-4 rounded-t-2xl flex items-center justify-between">
+            className="fixed md:bottom-6 md:right-6 bottom-0 right-0 left-0 top-0 md:left-auto md:top-auto md:w-96 md:h-[600px] w-full h-full md:rounded-2xl bg-gradient-to-br from-cream-50 to-golden-50 shadow-2xl z-50 flex flex-col border-2 border-golden-200"
+          >            {/* Header */}
+            <div className="bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 p-4 md:rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Fragrance Assistant</h3>
+                  <h3 className="font-semibold text-sm md:text-base">Fragrance Assistant</h3>
                   <p className="text-xs text-cream-200">AI-Powered Recommendations</p>
                 </div>
               </div>
@@ -180,13 +178,11 @@ export default function ChatBot() {
               >
                 <X className="w-5 h-5" />
               </button>
-            </div>
-
-            {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+            </div>            {/* Messages */}
+            <div className="flex-1 p-3 md:p-4 overflow-y-auto space-y-4">
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] p-3 rounded-lg ${
+                  <div className={`max-w-[85%] md:max-w-[80%] p-3 rounded-lg ${
                     message.isUser 
                       ? 'bg-gradient-to-r from-golden-400 to-golden-500 text-cream-50' 
                       : 'bg-white border border-golden-200 text-primary-800'
@@ -250,12 +246,10 @@ export default function ChatBot() {
                 </div>
               )}
               <div ref={messagesEndRef} />
-            </div>
-
-            {/* Quick Actions */}
+            </div>            {/* Quick Actions */}
             {!quizState.isActive && (
-              <div className="p-3 border-t border-golden-200">
-                <div className="flex space-x-2 mb-3">
+              <div className="p-3 md:p-3 border-t border-golden-200">
+                <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-3">
                   <button
                     onClick={startQuiz}
                     className="flex-1 bg-gradient-to-r from-pink-100 to-rose-100 text-pink-700 py-2 px-3 rounded-lg text-xs font-medium hover:from-pink-200 hover:to-rose-200 transition-colors"
@@ -270,10 +264,8 @@ export default function ChatBot() {
                   </button>
                 </div>
               </div>
-            )}
-
-            {/* Input */}
-            <div className="p-4 border-t border-golden-200">
+            )}            {/* Input */}
+            <div className="p-3 md:p-4 border-t border-golden-200">
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -281,13 +273,13 @@ export default function ChatBot() {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage(inputValue)}
                   placeholder="Ask about fragrances..."
-                  className="flex-1 p-2 border border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none text-sm"
+                  className="flex-1 p-2 md:p-3 border border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none text-sm"
                   disabled={isLoading}
                 />
                 <button
                   onClick={() => sendMessage(inputValue)}
                   disabled={isLoading || !inputValue.trim()}
-                  className="bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 p-2 rounded-lg hover:from-golden-600 hover:to-golden-700 transition-colors disabled:opacity-50"
+                  className="bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 p-2 md:p-3 rounded-lg hover:from-golden-600 hover:to-golden-700 transition-colors disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                 </button>
