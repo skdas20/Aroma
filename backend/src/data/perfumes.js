@@ -120,9 +120,9 @@ const perfumes = [
     category: "Unisex",
     price: 55.99,
     originalPrice: 70.00,
-    image: "https://images.unsplash.com/photo-1570554886111-e80fcac6c51d?w=400&h=500&fit=crop",
+    image: "https://th.bing.com/th/id/OIP.Uexxd5gDkWHHPZn_udlWVwHaE8?rs=1&pid=ImgDetMain",
     images: [
-      "https://images.unsplash.com/photo-1570554886111-e80fcac6c51d?w=400&h=500&fit=crop",
+      "https://th.bing.com/th/id/OIP.Uexxd5gDkWHHPZn_udlWVwHaE8?rs=1&pid=ImgDetMain",
       "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=500&fit=crop"
     ],
     description: "Energizing citrus blend perfect for morning wear. Uplifting and invigorating.",
