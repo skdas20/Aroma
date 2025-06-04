@@ -132,16 +132,36 @@ const LoadingAnimation = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="mb-6"
-        >          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-golden-800 via-nature-800 to-sky-800 bg-clip-text text-transparent mb-2 drop-shadow-lg">
-            Amaraa Luxury
-          </h1>
+          transition={{ delay: 1, duration: 0.8 }}          className="mb-6"        >          <motion.h1 
+            className="text-4xl md:text-6xl font-black mb-2 drop-shadow-xl"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+          >            <motion.span 
+              className="text-golden-900 font-black inline-block"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              A
+            </motion.span>
+            {['m','a','r','a','a',' ','L','u','x','u','r','y'].map((letter, index) => (
+              <motion.span
+                key={index}
+                className="text-golden-600 font-bold inline-block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.15, delay: 0.3 + index * 0.1 }}
+                style={{ marginLeft: letter === ' ' ? '0.3rem' : '0' }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5, duration: 0.8 }}
-            className="text-lg md:text-xl text-primary-900 font-semibold tracking-wide"
+            className="text-lg md:text-xl text-primary-900 font-bold tracking-wide"
           >
             Exquisite Fragrances Collection
           </motion.p>

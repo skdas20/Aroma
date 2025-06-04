@@ -106,15 +106,54 @@ export default function Home() {
                 ))}
                 
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6 relative z-10">
-                  <span className="bg-gradient-to-r from-sky-800 via-primary-800 to-nature-800 bg-clip-text text-transparent drop-shadow-lg">
-                    Discover
-                  </span>
-                  <br />
-                  <span className="text-primary-800">Your Perfect</span>
-                  <br />
-                  <span className="bg-gradient-to-r from-golden-600 via-sunshine-600 to-golden-700 bg-clip-text text-transparent drop-shadow-lg">
+                  <div>
+                    {['D','i','s','c','o','v','e','r'].map((letter, index) => (
+                      <motion.span
+                        key={index}
+                        className="text-golden-600 font-black drop-shadow-xl inline-block"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.15, delay: 0.5 + index * 0.1 }}
+                      >
+                        {letter}
+                      </motion.span>
+                    ))}
+                  </div>
+                  <div>
+                    <motion.span
+                      className="text-primary-800 inline-block"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.15, delay: 1.3 }}
+                    >
+                      Your
+                    </motion.span>
+                    <motion.span
+                      className="inline-block"
+                      style={{ width: '0.75rem' }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.15, delay: 1.7 }}
+                    >
+                      {' '}
+                    </motion.span>
+                    <motion.span
+                      className="text-primary-800 inline-block"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.15, delay: 1.8 }}
+                    >
+                      Perfect
+                    </motion.span>
+                  </div>
+                  <motion.span
+                    className="text-golden-600 font-black drop-shadow-xl block"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.15, delay: 2.3 }}
+                  >
                     Fragrance
-                  </span>
+                  </motion.span>
                 </h1>
               </div>
               <p className="text-xl text-primary-700 mb-8 leading-relaxed">
