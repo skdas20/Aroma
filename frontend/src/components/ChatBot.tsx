@@ -42,13 +42,12 @@ export default function ChatBot() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       // Welcome message
       setMessages([{
         id: '1',
-        text: "Hi! I'm your personal fragrance consultant. I can help you find the perfect perfume based on your preferences. Would you like to take a quick quiz or ask me about specific scents?",
+        text: "Hi! I'm your personal luxury consultant. I can help you find the perfect luxury items based on your preferences. Would you like to take a quick quiz or ask me about specific products?",
         isUser: false,
         timestamp: new Date()
       }]);
@@ -134,9 +133,8 @@ export default function ChatBot() {
     }));
     sendMessage(answer, true);
   };
-
   const startQuiz = () => {
-    sendMessage("I'd like to take the perfume quiz");
+    sendMessage("I'd like to take the luxury quiz");
   };
 
   return (
@@ -166,9 +164,8 @@ export default function ChatBot() {
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
                   <Sparkles className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm md:text-base">Fragrance Assistant</h3>
+                </div>                <div>
+                  <h3 className="font-semibold text-sm md:text-base">Luxury Assistant</h3>
                   <p className="text-xs text-cream-200">AI-Powered Recommendations</p>
                 </div>
               </div>
@@ -272,7 +269,7 @@ export default function ChatBot() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage(inputValue)}
-                  placeholder="Ask about fragrances..."
+                  placeholder="Ask about luxury products..."
                   className="flex-1 p-2 md:p-3 border border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none text-sm"
                   disabled={isLoading}
                 />

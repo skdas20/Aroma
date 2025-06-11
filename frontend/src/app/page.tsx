@@ -9,17 +9,6 @@ import LoadingAnimation from '@/components/LoadingAnimation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/contexts/CartContext';
-import dynamic from 'next/dynamic';
-
-// Dynamically import the 3D component to avoid SSR issues
-const PerfumeBottle3D = dynamic(() => import('@/components/PerfumeBottle3D'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-96 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-    </div>
-  )
-});
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -152,13 +141,13 @@ export default function Home() {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.15, delay: 2.3 }}
                   >
-                    Fragrance
+                    Luxury
                   </motion.span>
                 </h1>
               </div>
               <p className="text-xl text-primary-700 mb-8 leading-relaxed">
-                Immerse yourself in our curated collection of luxury perfumes. 
-                From fresh citrus notes to deep woody scents, find the fragrance that tells your story.
+                Discover our exclusive collection of luxury items. 
+                From exquisite fragrances to premium accessories, find the perfect pieces that define your style.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <motion.button
@@ -183,17 +172,102 @@ export default function Home() {
               </div>
             </motion.div>
             
-            {/* Interactive 3D Perfume Bottle */}
+            {/* Interactive Shiny Logo */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative order-1 lg:order-2"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-golden-200/30 via-sky-200/30 to-nature-200/30 rounded-3xl blur-3xl"></div>
-              {/* Desktop: Full size, Mobile: Smaller and positioned above text */}
-              <div className="lg:h-96 h-64 flex items-center justify-center">
-                <PerfumeBottle3D />
+              {/* Glow background effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-golden-200/40 via-sky-200/40 to-nature-200/40 rounded-full blur-3xl animate-pulse"></div>
+              
+              {/* Logo container */}
+              <div className="lg:h-96 h-64 flex items-center justify-center relative">
+                <motion.div
+                  animate={{ 
+                    rotate: [0, 5, -5, 0],
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{ 
+                    duration: 4, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="relative"
+                >
+                  {/* Multiple logo layers for depth effect */}
+                  <div className="relative w-72 h-72 lg:w-80 lg:h-80">
+                    {/* Shadow/blur layer */}
+                    <div className="absolute inset-2 rounded-full bg-gradient-to-br from-golden-400/30 to-nature-400/30 blur-xl"></div>
+                    
+                    {/* Main logo with shiny border */}
+                    <motion.div
+                      animate={{ 
+                        boxShadow: [
+                          '0 0 20px rgba(255, 215, 0, 0.5)',
+                          '0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(34, 197, 94, 0.3)',
+                          '0 0 20px rgba(255, 215, 0, 0.5)'
+                        ]
+                      }}
+                      transition={{ 
+                        duration: 3, 
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      className="relative w-full h-full rounded-full border-4 border-golden-400 overflow-hidden bg-white/90 backdrop-blur-sm"
+                    >
+                      <Image
+                        src="/logo.jpg"
+                        alt="Amaraa Luxury Logo"
+                        fill
+                        className="object-cover rounded-full"
+                        priority
+                      />
+                      
+                      {/* Shine overlay effect */}
+                      <motion.div
+                        animate={{
+                          x: ['-100%', '200%'],
+                          opacity: [0, 0.7, 0]
+                        }}
+                        transition={{
+                          duration: 2.5,
+                          repeat: Infinity,
+                          repeatDelay: 1,
+                          ease: "easeInOut"
+                        }}
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
+                        style={{ width: '50%' }}
+                      />
+                    </motion.div>
+                    
+                    {/* Floating sparkles around logo */}
+                    {[...Array(6)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 bg-gradient-to-br from-golden-400 to-golden-600 rounded-full"
+                        animate={{
+                          x: [0, Math.cos(i * 60 * Math.PI / 180) * 100],
+                          y: [0, Math.sin(i * 60 * Math.PI / 180) * 100],
+                          scale: [0, 1, 0],
+                          opacity: [0, 1, 0]
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          delay: i * 0.3,
+                          ease: "easeOut"
+                        }}
+                        style={{
+                          left: '50%',
+                          top: '50%',
+                          boxShadow: '0 0 10px rgba(255, 215, 0, 0.8)'
+                        }}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -212,7 +286,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold bg-gradient-to-r from-primary-800 via-golden-700 to-nature-800 bg-clip-text text-transparent mb-4">
               Shop by Category
             </h2>
-            <p className="text-lg text-primary-700">
+            <p className="text-2xl md:text-3xl text-primary-700 italic font-serif">
               Explore our carefully curated fragrance collections
             </p>
           </motion.div>
@@ -253,7 +327,8 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -10 }}
-                className={`${category.bgColor} rounded-2xl shadow-xl overflow-hidden group cursor-pointer border-2 border-golden-200 hover:border-golden-400 transition-all`}
+                className={`${category.bgColor} rounded-2xl shadow-xl overflow-hidden group cursor-pointer border-2 border-golden-200 hover:border-golden-400 transition-all relative`}
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
               >
                 <div 
                   className={`h-48 bg-gradient-to-br ${category.color} relative overflow-hidden`}
@@ -314,7 +389,8 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="text-center bg-gradient-to-br from-cream-50 to-golden-50 p-8 rounded-2xl shadow-xl border-2 border-golden-200 hover:border-golden-400 transition-all"
+                className="text-center bg-gradient-to-br from-cream-50 to-golden-50 p-8 rounded-2xl shadow-xl border-2 border-golden-200 hover:border-golden-400 transition-all relative"
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
               >
                 <div className={`w-16 h-16 mx-auto mb-6 bg-gradient-to-br ${feature.color} rounded-full flex items-center justify-center shadow-lg`}>
                   <feature.icon className="w-8 h-8 text-cream-50" />

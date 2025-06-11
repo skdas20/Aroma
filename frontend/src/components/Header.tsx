@@ -13,12 +13,28 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const router = useRouter();const { cartItemCount } = useCart();
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const router = useRouter();
+  const { cartItemCount } = useCart();
   const { user, openLoginModal, logout } = useAuth();
   
-  const cartCount = cartItemCount;  const navigation = [
+  const cartCount = cartItemCount;
+
+  const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Products', href: '/products' },
+    { 
+      name: 'Products', 
+      href: '/products', 
+      hasDropdown: true,
+      dropdownItems: [
+        { name: 'Fragrances', href: '/products', available: true },
+        { name: 'Bags', href: '#', available: false },
+        { name: 'Glasses', href: '#', available: false },
+        { name: 'Clothing', href: '#', available: false },
+        { name: 'Shoes', href: '#', available: false },
+        { name: 'Accessories', href: '#', available: false },
+      ]
+    },
     { name: 'Men', href: '/men' },
     { name: 'Women', href: '/women' },
     { name: 'Unisex', href: '/products?category=Unisex' },
@@ -54,9 +70,7 @@ export default function Header() {
                 AMARAA LUXURY
               </span>
             </Link>
-          </motion.div>
-
-          {/* Desktop Navigation */}
+          </motion.div>          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             {navigation.map((item, index) => (
               <motion.div
@@ -64,16 +78,66 @@ export default function Header() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
+                className="relative"
               >
-                <Link
-                  href={item.href}
-                  className="text-primary-800 hover:text-golden-600 transition-colors font-semibold hover:scale-105 transform"
-                >
-                  {item.name}
-                </Link>
+                {item.hasDropdown ? (
+                  <div 
+                    className="relative"
+                    onMouseEnter={() => setIsProductsDropdownOpen(true)}
+                    onMouseLeave={() => setIsProductsDropdownOpen(false)}
+                  >
+                    <Link
+                      href={item.href}
+                      className="text-primary-800 hover:text-golden-600 transition-colors font-semibold hover:scale-105 transform flex items-center space-x-1"
+                    >
+                      <span>{item.name}</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </Link>
+                    
+                    {/* Dropdown Menu */}
+                    {isProductsDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute top-full left-0 mt-2 w-48 bg-white/95 backdrop-blur-md rounded-lg shadow-xl border border-golden-200 z-50"
+                      >
+                        {item.dropdownItems?.map((dropdownItem, idx) => (
+                          <div key={dropdownItem.name}>
+                            {dropdownItem.available ? (
+                              <Link
+                                href={dropdownItem.href}
+                                className="block px-4 py-3 text-primary-700 hover:text-golden-600 hover:bg-golden-50 transition-all font-medium"
+                              >
+                                {dropdownItem.name}
+                              </Link>
+                            ) : (
+                              <div className="block px-4 py-3 text-gray-400 cursor-not-allowed relative">
+                                <span>{dropdownItem.name}</span>
+                                <span className="text-xs text-golden-600 ml-2 font-semibold">Coming Soon</span>
+                              </div>
+                            )}
+                            {idx < item.dropdownItems.length - 1 && (
+                              <div className="border-t border-golden-100"></div>
+                            )}
+                          </div>
+                        ))}
+                      </motion.div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="text-primary-800 hover:text-golden-600 transition-colors font-semibold hover:scale-105 transform"
+                  >
+                    {item.name}
+                  </Link>
+                )}
               </motion.div>
             ))}
-          </nav>          {/* Desktop Actions */}
+          </nav>{/* Desktop Actions */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -87,7 +151,7 @@ export default function Header() {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search perfumes..."
+                    placeholder="Search luxury items..."
                     className="w-64 px-4 py-2 pl-10 pr-4 border border-golden-300 rounded-full focus:outline-none focus:ring-2 focus:ring-golden-400 focus:border-transparent bg-white/90 backdrop-blur-sm"
                     autoFocus
                   />
@@ -182,18 +246,53 @@ export default function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden py-4 border-t border-golden-200"
-          >
-            <div className="flex flex-col space-y-3">
+          >            <div className="flex flex-col space-y-3">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-primary-700 hover:text-golden-600 transition-colors font-medium px-2 py-1"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}              <div className="flex items-center justify-between px-2 py-2 border-t border-golden-200 mt-3 pt-3">
+                <div key={item.name}>
+                  {item.hasDropdown ? (
+                    <div>
+                      <Link
+                        href={item.href}
+                        className="text-primary-700 hover:text-golden-600 transition-colors font-medium px-2 py-1 flex items-center justify-between"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <span>{item.name}</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </Link>
+                      <div className="ml-4 mt-2 space-y-1">
+                        {item.dropdownItems?.map((dropdownItem) => (
+                          <div key={dropdownItem.name}>
+                            {dropdownItem.available ? (
+                              <Link
+                                href={dropdownItem.href}
+                                className="block text-primary-600 hover:text-golden-600 transition-colors font-normal px-2 py-1 text-sm"
+                                onClick={() => setIsMenuOpen(false)}
+                              >
+                                {dropdownItem.name}
+                              </Link>
+                            ) : (
+                              <div className="block text-gray-400 px-2 py-1 text-sm cursor-not-allowed">
+                                <span>{dropdownItem.name}</span>
+                                <span className="text-xs text-golden-600 ml-2 font-semibold">Coming Soon</span>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="text-primary-700 hover:text-golden-600 transition-colors font-medium px-2 py-1"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
+              ))}<div className="flex items-center justify-between px-2 py-2 border-t border-golden-200 mt-3 pt-3">
                 <div className="flex items-center space-x-4">
                   {/* Mobile Search */}
                   <div className="relative">

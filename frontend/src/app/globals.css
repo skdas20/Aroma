@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: linear-gradient(135deg, #f0f9ff 0%, #ecfeff 25%, #f0fdf4 50%, #fffef7 75%, #fefce8 100%);
+  --background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 15%, #ecfccb 30%, #fefce8 45%, #fef3c7 60%, #fed7aa 75%, #fce7f3 90%, #f3e8ff 100%);
   --foreground: #155e75;
 }
 
@@ -11,9 +11,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-
 body {
-  background: linear-gradient(135deg, #f0f9ff 0%, #ecfeff 25%, #f0fdf4 50%, #fffef7 75%, #fefce8 100%);
+  background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 15%, #ecfccb 30%, #fefce8 45%, #fef3c7 60%, #fed7aa 75%, #fce7f3 90%, #f3e8ff 100%);
   background-attachment: fixed;
   color: #155e75;
   font-family: Arial, Helvetica, sans-serif;
@@ -52,4 +51,610 @@ body {
 
 .animate-glow {
   animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced artistic SVG background shapes using pseudo-elements */
+body::before {
+  content: '';
+  position: fixed;
+  top: -10vw;
+  left: -10vw;
+  width: 60vw;
+  height: 60vw;
+  background-image: 
+    radial-gradient(circle at 30% 30%, #b6e3ff66 0%, #e0ffd644 60%, transparent 100%),
+    radial-gradient(circle at 70% 80%, #fef3c766 0%, #fed7aa44 60%, transparent 100%),
+    url('data:image/svg+xml;utf8,<svg width="320" height="180" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 80 Q80 10 300 40 Q200 120 10 80 Z" fill="%23b6e3ff" fill-opacity="0.35"/><path d="M30 100 Q120 30 280 60 Q180 140 30 100 Z" fill="%23d4af37" fill-opacity="0.25"/><circle cx="160" cy="90" r="30" fill="%2322c55e" fill-opacity="0.20"/></svg>');
+  background-repeat: no-repeat;
+  background-size: 60vw 60vw, 40vw 40vw, 320px 180px;
+  background-position: left top, 20% 30%, 0px 0px;
+  z-index: 0;
+  filter: blur(20px) saturate(1.3);
+  pointer-events: none;
+  opacity: 0.4;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -12vw;
+  right: -12vw;
+  width: 50vw;
+  height: 50vw;
+  background-image: 
+    radial-gradient(circle at 70% 70%, #f7e9c088 0%, #fce7f366 60%, transparent 100%),
+    radial-gradient(circle at 30% 20%, #e0ffd655 0%, #b6e3ff44 60%, transparent 100%),
+    url('data:image/svg+xml;utf8,<svg width="320" height="180" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M310 100 Q240 170 20 140 Q120 60 310 100 Z" fill="%23b6e3ff" fill-opacity="0.30"/><path d="M290 80 Q200 150 40 120 Q140 40 290 80 Z" fill="%23d4af37" fill-opacity="0.20"/><polygon points="160,50 180,90 160,130 140,90" fill="%23f7e9c0" fill-opacity="0.25"/></svg>');
+  background-repeat: no-repeat;
+  background-size: 50vw 50vw, 35vw 35vw, 320px 180px;
+  background-position: right bottom, 80% 70%, right bottom;
+  z-index: 0;
+  filter: blur(24px) saturate(1.2);
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Artistic decorative circles and shapes */
+.artistic-circles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.artistic-circles::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 200px;
+  height: 200px;
+  border: 4px solid #b6e3ff66;
+  border-radius: 50%;
+  animation: rotate 20s linear infinite;
+}
+
+.artistic-circles::after {
+  content: '';
+  position: absolute;
+  bottom: 20%;
+  left: 8%;
+  width: 150px;
+  height: 150px;
+  border: 3px solid #d4af3777;
+  border-radius: 50%;
+  animation: rotate 25s linear infinite reverse;
+}
+
+/* Enhanced corner designs with more visibility */
+.corner-designs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.corner-designs::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 400px;
+  background: 
+    radial-gradient(circle at 80% 20%, #b6e3ff44 0%, transparent 50%),
+    conic-gradient(from 45deg at 90% 10%, #d4af3755 0deg, transparent 60deg, #b6e3ff55 120deg, transparent 180deg);
+  border-radius: 0 0 0 100%;
+  filter: blur(15px);
+}
+
+.corner-designs::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 350px;
+  height: 350px;
+  background: 
+    radial-gradient(circle at 20% 80%, #f7e9c066 0%, transparent 50%),
+    conic-gradient(from 225deg at 10% 90%, #22c55e22 0deg, transparent 60deg, #d4af3722 120deg, transparent 180deg);
+  border-radius: 0 100% 0 0;
+  filter: blur(12px);
+}
+
+/* More floating geometric shapes with better visibility */
+.floating-shapes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Enhanced triangle shapes with better visibility */
+.triangle-1 {
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 70px solid #b6e3ff33;
+  transform: rotate(15deg);
+  animation: float 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(182, 227, 255, 0.6));
+}
+
+.triangle-2 {
+  position: absolute;
+  bottom: 30%;
+  right: 20%;
+  width: 0;
+  height: 0;
+  border-left: 35px solid transparent;
+  border-right: 35px solid transparent;
+  border-bottom: 60px solid #d4af3755;
+  transform: rotate(-25deg);
+  animation: float 12s ease-in-out infinite reverse;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+}
+
+.triangle-3 {
+  position: absolute;
+  top: 55%;
+  right: 12%;
+  width: 0;
+  height: 0;
+  border-left: 32px solid transparent;
+  border-right: 32px solid transparent;
+  border-bottom: 55px solid #22c55e33;
+  transform: rotate(35deg);
+  animation: float 10s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));
+}
+
+/* Enhanced diamond shapes with better visibility */
+.diamond-1 {
+  position: absolute;
+  top: 60%;
+  left: 25%;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(45deg, #22c55e33, #b6e3ff33);
+  transform: rotate(45deg);
+  border-radius: 10px;
+  animation: rotate 15s linear infinite;
+  filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.5));
+}
+
+.diamond-2 {
+  position: absolute;
+  top: 35%;
+  right: 30%;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(45deg, #f7e9c055, #d4af3755);
+  transform: rotate(45deg);
+  border-radius: 8px;
+  animation: rotate 18s linear infinite reverse;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+}
+
+.diamond-3 {
+  position: absolute;
+  top: 15%;
+  left: 35%;
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(45deg, #b6e3ff33, #22c55e33);
+  transform: rotate(45deg);
+  border-radius: 7px;
+  animation: rotate 22s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(182, 227, 255, 0.5));
+}
+
+/* Enhanced hexagon shapes with better visibility */
+.hexagon-1 {
+  position: absolute;
+  bottom: 15%;
+  left: 60%;
+  width: 60px;
+  height: 34.64px;
+  background: #b6e3ff33;
+  position: relative;
+  border-radius: 6px;
+  animation: float 10s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(182, 227, 255, 0.6));
+}
+
+.hexagon-1::before,
+.hexagon-1::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  border-left: 30px solid transparent;
+  border-right: 30px solid transparent;
+}
+
+.hexagon-1::before {
+  bottom: 100%;
+  border-bottom: 17.32px solid #b6e3ff33;
+}
+
+.hexagon-1::after {
+  top: 100%;
+  border-top: 17.32px solid #b6e3ff33;
+}
+
+.hexagon-2 {
+  position: absolute;
+  top: 45%;
+  left: 12%;
+  width: 55px;
+  height: 31.75px;
+  background: #d4af3733;
+  position: relative;
+  border-radius: 5px;
+  animation: float 14s ease-in-out infinite reverse;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+}
+
+.hexagon-2::before,
+.hexagon-2::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  border-left: 27.5px solid transparent;
+  border-right: 27.5px solid transparent;
+}
+
+.hexagon-2::before {
+  bottom: 100%;
+  border-bottom: 15.88px solid #d4af3733;
+}
+
+.hexagon-2::after {
+  top: 100%;
+  border-top: 15.88px solid #d4af3733;
+}
+
+/* New star shapes */
+.star-1 {
+  position: absolute;
+  top: 20%;
+  left: 70%;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 12px solid #f7e9c033;
+  transform: rotate(35deg);
+  animation: rotate 20s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(247, 233, 192, 0.5));
+}
+
+.star-1::before {
+  content: '';
+  position: absolute;
+  left: -15px;
+  top: 3px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 12px solid #f7e9c033;
+  transform: rotate(-70deg);
+}
+
+.star-2 {
+  position: absolute;
+  bottom: 25%;
+  right: 8%;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 10px solid #22c55e22;
+  transform: rotate(-15deg);
+  animation: rotate 16s linear infinite reverse;
+  filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.4));
+}
+
+.star-2::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 2px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 10px solid #22c55e22;
+  transform: rotate(-70deg);
+}
+
+/* Enhanced wave patterns with more visibility */
+.wave-pattern {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #b6e3ff22 50%, transparent 100%);
+  animation: wave 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(182, 227, 255, 0.3));
+}
+
+.wave-pattern-2 {
+  position: absolute;
+  bottom: 45%;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #d4af3733 50%, transparent 100%);
+  animation: wave 8s ease-in-out infinite reverse;
+  filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.4));
+}
+
+.wave-pattern-3 {
+  position: absolute;
+  top: 70%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #22c55e22 50%, transparent 100%);
+  animation: wave 10s ease-in-out infinite;
+  filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.3));
+}
+
+/* Enhanced circle patterns with more visibility */
+.circle-pattern-1 {
+  position: absolute;
+  top: 35%;
+  right: 5%;
+  width: 80px;
+  height: 80px;
+  border: 3px dashed #b6e3ff33;
+  border-radius: 50%;
+  animation: rotate 30s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(182, 227, 255, 0.5));
+}
+
+.circle-pattern-2 {
+  position: absolute;
+  bottom: 35%;
+  left: 5%;
+  width: 70px;
+  height: 70px;
+  border: 3px dotted #d4af3733;
+  border-radius: 50%;
+  animation: rotate 25s linear infinite reverse;
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.5));
+}
+
+/* Additional artistic elements */
+.circle-pattern-3 {
+  position: absolute;
+  top: 75%;
+  right: 25%;
+  width: 60px;
+  height: 60px;
+  border: 2px solid #22c55e33;
+  border-radius: 50%;
+  animation: float 14s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.4));
+}
+
+.circle-pattern-4 {
+  position: absolute;
+  top: 10%;
+  left: 60%;
+  width: 90px;
+  height: 90px;
+  border: 2px double #f7e9c033;
+  border-radius: 50%;
+  animation: rotate 35s linear infinite;
+  filter: drop-shadow(0 0 7px rgba(247, 233, 192, 0.4));
+}
+
+/* New pentagon shapes */
+.pentagon-1 {
+  position: absolute;
+  top: 50%;
+  left: 8%;
+  width: 50px;
+  height: 35px;
+  background: #b6e3ff33;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  animation: float 12s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(182, 227, 255, 0.4));
+}
+
+.pentagon-2 {
+  position: absolute;
+  bottom: 40%;
+  right: 15%;
+  width: 45px;
+  height: 32px;
+  background: #d4af3733;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  animation: float 16s ease-in-out infinite reverse;
+  filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+}
+
+/* Octagon shapes */
+.octagon-1 {
+  position: absolute;
+  top: 65%;
+  right: 35%;
+  width: 48px;
+  height: 48px;
+  background: #22c55e22;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  animation: rotate 20s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.3));
+}
+
+.octagon-2 {
+  position: absolute;
+  top: 25%;
+  left: 80%;
+  width: 42px;
+  height: 42px;
+  background: #f7e9c033;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  animation: rotate 24s linear infinite reverse;
+  filter: drop-shadow(0 0 4px rgba(247, 233, 192, 0.3));
+}
+
+/* Enhanced ellipse shapes */
+.ellipse-1 {
+  position: absolute;
+  top: 15%;
+  right: 40%;
+  width: 80px;
+  height: 40px;
+  background: linear-gradient(45deg, #b6e3ff22, #22c55e22);
+  border-radius: 50%;
+  transform: rotate(25deg);
+  animation: float 10s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(182, 227, 255, 0.3));
+}
+
+.ellipse-2 {
+  position: absolute;
+  bottom: 20%;
+  left: 40%;
+  width: 70px;
+  height: 35px;
+  background: linear-gradient(45deg, #d4af3733, #f7e9c022);
+  border-radius: 50%;
+  transform: rotate(-35deg);
+  animation: float 14s ease-in-out infinite reverse;
+  filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
+}
+
+/* Crescent moon shapes */
+.crescent-1 {
+  position: absolute;
+  top: 80%;
+  left: 15%;
+  width: 40px;
+  height: 40px;
+  background: #b6e3ff33;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 28s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(182, 227, 255, 0.4));
+}
+
+.crescent-1::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 8px;
+  width: 30px;
+  height: 30px;
+  background: #f0f9ff;
+  border-radius: 50%;
+}
+
+.crescent-2 {
+  position: absolute;
+  top: 5%;
+  right: 15%;
+  width: 35px;
+  height: 35px;
+  background: #d4af3733;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 32s linear infinite reverse;
+  filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.4));
+}
+
+.crescent-2::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 7px;
+  width: 26px;
+  height: 26px;
+  background: #f0f9ff;
+  border-radius: 50%;
+}
+
+/* Card/Container styling for luxury effect (stronger contrast) */
+.lux-card, .lux-container {
+  background: linear-gradient(120deg, #fffefc 80%, #f8fafcdd 100%);
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 32px 0 rgba(34, 197, 94, 0.08), 0 1.5px 8px 0 rgba(212, 175, 55, 0.10), 0 2px 16px 0 rgba(34, 197, 94, 0.06);
+  border: 1.5px solid #e0ffd6;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(2px) saturate(1.05);
+  /* Add a subtle white overlay for even more contrast */
+  background-blend-mode: lighten;
+}
+
+/* Accent for buttons and highlights (more vibrant) */
+.lux-btn, .btn-primary {
+  background: linear-gradient(90deg, #b6e3ff 0%, #d4af37 100%);
+  color: #155e75;
+  border-radius: 9999px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px 0 rgba(34, 197, 94, 0.10);
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: none;
+  outline: none;
+}
+.lux-btn:hover, .btn-primary:hover {
+  box-shadow: 0 4px 16px 0 rgba(34, 197, 94, 0.18), 0 0 0 2px #b6e3ff44;
+  transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(90deg, #d4af37 0%, #b6e3ff 100%);
+}
+
+/* Artistic border for hero/headers */
+.lux-hero {
+  border-bottom: 4px solid #b6e3ff;
+  border-image: linear-gradient(90deg, #b6e3ff 0%, #d4af37 100%) 1;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, #f0f9ff 60%, #f7e9c0 100%);
+  border-radius: 1rem 1rem 0 0;
+  box-shadow: 0 2px 12px 0 rgba(34, 197, 94, 0.06);
+  z-index: 2;
+}
+
+/* Ensure main content appears above background effects */
+main, .main-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Ensure cards and sections are above background */
+.card, .section, .container {
+  position: relative;
+  z-index: 5;
+}
+
+/* Ensure headers and navigation are at the top */
+header, nav, .header {
+  position: relative;
+  z-index: 20;
+}
+
+/* Ensure footer is above background effects */
+footer {
+  position: relative;
+  z-index: 15;
 }

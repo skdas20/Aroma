@@ -6,7 +6,7 @@ import { Heart, Instagram, Facebook, Twitter } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-slate-800 via-slate-900 to-black text-white py-12 border-t-4 border-golden-400">
+    <footer className="bg-gradient-to-b from-slate-800 via-slate-900 to-black text-white py-12 border-t-4 border-golden-400 relative z-10" style={{ backgroundColor: 'rgba(15, 23, 42, 0.98)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Brand Section */}

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
@@ -24,17 +24,14 @@ const LoadingAnimation = () => {
 
   useEffect(() => {
     setMolecules(getRandomMolecules());
-    
     // Animate through logo frames in sequence: a -> b -> c -> d -> e -> f -> repeat
     const frameInterval = setInterval(() => {
       setIsTransitioning(true);
-      
       setTimeout(() => {
         setCurrentFrame((prev) => (prev + 1) % logoFrames.length);
         setIsTransitioning(false);
       }, 600); // Half of the transition time
     }, 1200); // Change frame every 1.2 seconds for smooth animation
-    
     return () => clearInterval(frameInterval);
   }, []);
 
@@ -79,14 +76,14 @@ const LoadingAnimation = () => {
       </div>
 
       {/* Main loading container */}
-      <div className="text-center z-10">
-        {/* Logo Animation using your images */}
+      <div className="text-center z-10">        {/* Logo Animation using your images */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ duration: 1, ease: 'easeOut' }}
-          className="mb-8"
-        >          <div className="w-32 h-32 mx-auto relative">
+          className="mb-12 -mt-16"
+        >
+          <div className="w-32 h-32 mx-auto relative">
             <motion.div
               animate={{ 
                 scale: [1, 1.05, 1],
@@ -98,7 +95,8 @@ const LoadingAnimation = () => {
                 ease: "easeInOut"
               }}
               className="w-full h-full relative rounded-full shadow-2xl overflow-hidden border-4 border-golden-400 animate-glow"
-            >              {/* Current Image with smooth transition */}
+            >
+              {/* Current Image with smooth transition */}
               <motion.div
                 key={currentFrame}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -156,14 +154,13 @@ const LoadingAnimation = () => {
                 {letter}
               </motion.span>
             ))}
-          </motion.h1>
-          <motion.p
+          </motion.h1>          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.5, duration: 0.8 }}
             className="text-lg md:text-xl text-primary-900 font-bold tracking-wide"
           >
-            Exquisite Fragrances Collection
+            Luxury Collection & Premium Lifestyle
           </motion.p>
         </motion.div>
 
@@ -208,14 +205,13 @@ const LoadingAnimation = () => {
           </div>
         </motion.div>
 
-        {/* Loading text */}
-        <motion.p
+        {/* Loading text */}        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 3 }}
           className="mt-4 text-primary-600 text-sm tracking-wide font-medium"
         >
-          Crafting your luxury experience...
+          Curating your luxury lifestyle...
         </motion.p>
       </div>
     </div>
