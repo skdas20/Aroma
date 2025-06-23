@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
@@ -21,6 +21,13 @@ interface Customer {
   lastLogin?: string;
   orderCount?: number;
   totalSpent?: number;
+  phoneNumber?: string;
+  authProvider?: string;
+  isTestUser?: boolean;
+  totalOrders?: number;
+  lastOrderDate?: string;
+  status?: string;
+  joinDate?: string;
 }
 
 export default function CustomersPage() {
@@ -28,13 +35,10 @@ export default function CustomersPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-
-  useEffect(() => {
+  const [showDetailsModal, setShowDetailsModal] = useState(false);  useEffect(() => {
     fetchCustomers();
   }, [searchTerm]);
-
-  const fetchCustomers = async () => {
+  const fetchCustomers = useCallback(async () => {
     try {
       const searchParams = new URLSearchParams();
       if (searchTerm) {
@@ -47,12 +51,12 @@ export default function CustomersPage() {
       } else {
         setCustomers([]);
       }
-    } catch (error) {
+    } catch {
       setCustomers([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm]);
 
   const getAuthProviderBadge = (provider: string, isTestUser: boolean) => {
     if (isTestUser) {
@@ -215,7 +219,7 @@ export default function CustomersPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {getAuthProviderBadge(customer.authProvider, customer.isTestUser)}
+                      {customer.authProvider && getAuthProviderBadge(customer.authProvider, customer.isTestUser || false)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{customer.totalOrders}</div>
@@ -227,16 +231,16 @@ export default function CustomersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        ₹{customer.totalSpent.toFixed(2)}
+                        ₹{customer.totalSpent?.toFixed(2) || '0.00'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(customer.status)}
+                      {customer.status && getStatusBadge(customer.status)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        {new Date(customer.joinDate).toLocaleDateString()}
+                        {customer.joinDate ? new Date(customer.joinDate).toLocaleDateString() : 'N/A'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -298,7 +302,7 @@ export default function CustomersPage() {
                       <div>
                         <label className="text-sm font-medium text-gray-500">Auth Provider</label>
                         <div className="mt-1">
-                          {getAuthProviderBadge(selectedCustomer.authProvider, selectedCustomer.isTestUser)}
+                          {selectedCustomer.authProvider && getAuthProviderBadge(selectedCustomer.authProvider, selectedCustomer.isTestUser || false)}
                         </div>
                       </div>
                     </div>
@@ -314,21 +318,21 @@ export default function CustomersPage() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-500">Total Spent:</span>
-                        <span className="text-sm font-medium text-gray-900">₹{selectedCustomer.totalSpent.toFixed(2)}</span>
+                        <span className="text-sm font-medium text-gray-900">₹{selectedCustomer.totalSpent?.toFixed(2) || '0.00'}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-500">Average Order:</span>
                         <span className="text-sm font-medium text-gray-900">
-                          ₹{selectedCustomer.totalOrders > 0 ? (selectedCustomer.totalSpent / selectedCustomer.totalOrders).toFixed(2) : '0.00'}
+                          ₹{(selectedCustomer.totalOrders || 0) > 0 ? ((selectedCustomer.totalSpent || 0) / (selectedCustomer.totalOrders || 1)).toFixed(2) : '0.00'}
                         </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-500">Status:</span>
-                        {getStatusBadge(selectedCustomer.status)}
+                        {selectedCustomer.status && getStatusBadge(selectedCustomer.status)}
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-500">Joined:</span>
-                        <span className="text-sm text-gray-900">{new Date(selectedCustomer.joinDate).toLocaleDateString()}</span>
+                        <span className="text-sm text-gray-900">{selectedCustomer.joinDate ? new Date(selectedCustomer.joinDate).toLocaleDateString() : 'N/A'}</span>
                       </div>
                       {selectedCustomer.lastOrderDate && (
                         <div className="flex justify-between">

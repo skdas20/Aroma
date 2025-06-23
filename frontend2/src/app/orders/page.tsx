@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
@@ -49,8 +49,7 @@ export default function OrdersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  useEffect(() => {
+  const [showUpdateModal, setShowUpdateModal] = useState(false);  useEffect(() => {
     fetchOrders();
   }, [statusFilter, searchTerm]);
   const fetchOrders = async () => {
@@ -89,10 +88,8 @@ export default function OrdersPage() {
           status: newStatus,
           ...(trackingNumber && { trackingNumber })
         }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
+      });      if (response.ok) {
+        await response.json();
         setOrders(orders.map(order => 
           order._id === orderId 
             ? { ...order, status: newStatus, ...(trackingNumber && { trackingNumber }) }

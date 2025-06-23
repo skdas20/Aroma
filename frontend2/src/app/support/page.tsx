@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, 
@@ -8,7 +8,6 @@ import {
   MessageSquare, 
   Clock, 
   CheckCircle, 
-  XCircle,
   User,
   Calendar,
   Reply
@@ -79,10 +78,8 @@ export default function SupportPage() {
           status: newStatus,
           ...(adminResponse && { adminResponse })
         }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
+      });      if (response.ok) {
+        await response.json();
         setTickets(tickets.map(ticket => 
           ticket._id === ticketId 
             ? { ...ticket, status: newStatus, updatedAt: new Date().toISOString(), ...(adminResponse && { adminResponse }) }
