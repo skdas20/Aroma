@@ -24,6 +24,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   'https://aroma-blush.vercel.app',
+  'https://aroma-ipst.vercel.app',
   process.env.FRONTEND_URL,
   process.env.ADMIN_FRONTEND_URL
 ].filter(Boolean); // Remove any undefined values
