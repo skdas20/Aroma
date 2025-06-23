@@ -1,12 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const connectDatabase = require('./src/config/database');
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Global variable to track database status
+global.useMockDatabase = false;
+
+// Try to connect to MongoDB
+connectDatabase().catch((error) => {
+  console.log('❌ MongoDB connection failed:', error.message);
+  console.log('📝 Using mock database for development');
+  global.useMockDatabase = true;
+});
 
 // Middleware
 const allowedOrigins = [
@@ -27,6 +38,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/products', require('./src/routes/products'));
 app.use('/api/cart', require('./src/routes/cart'));
 app.use('/api/auth', require('./src/routes/auth'));
+app.use('/api/orders', require('./src/routes/orders'));
+app.use('/api/support', require('./src/routes/support'));
+app.use('/api/admin', require('./src/routes/admin'));
 app.use('/api/chatbot', require('./src/routes/chatbot'));
 
 // Health check endpoint
@@ -34,7 +48,8 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     message: 'Aroma Perfume Backend is running!',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    database: global.useMockDatabase ? 'Mock Database' : 'MongoDB Connected'
   });
 });
 
@@ -44,5 +59,3 @@ app.listen(PORT, () => {
   console.log(`📱 Frontend URL: http://localhost:3000`);
   console.log(`🔗 API URL: http://localhost:${PORT}/api`);
 });
-
-module.exports = app;

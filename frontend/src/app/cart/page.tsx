@@ -133,10 +133,10 @@ export default function CartPage() {
                       <p className="text-sm text-primary-600">{item.brand}</p>
                       <p className="text-sm text-primary-500 mt-1">Size: {item.size}</p>
                       <div className="flex items-center mt-2">
-                        <span className="text-xl font-bold text-golden-700">${item.price}</span>
+                        <span className="text-xl font-bold text-golden-700">₹{item.price}</span>
                         {item.originalPrice && item.originalPrice > item.price && (
                           <span className="ml-2 text-sm text-gray-500 line-through">
-                            ${item.originalPrice}
+                            ₹{item.originalPrice}
                           </span>
                         )}
                       </div>
@@ -204,21 +204,21 @@ export default function CartPage() {
                     Subtotal ({cart.summary?.itemCount || cart.items.length} items)
                   </span>
                   <span className="font-semibold text-primary-800">
-                    ${(cart.summary?.subtotal || cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toFixed(2)}
+                    ₹{(cart.summary?.subtotal || cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toFixed(2)}
                   </span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-primary-600">Shipping</span>
                   <span className="font-semibold text-primary-800">
-                    {(cart.summary?.shipping || 0) === 0 ? 'Free' : `$${(cart.summary?.shipping || 0).toFixed(2)}`}
+                    {(cart.summary?.shipping || 0) === 0 ? 'Free' : `₹${(cart.summary?.shipping || 0).toFixed(2)}`}
                   </span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span className="text-primary-600">Tax</span>
                   <span className="font-semibold text-primary-800">
-                    ${(cart.summary?.tax || 0).toFixed(2)}
+                    ₹{(cart.summary?.tax || 0).toFixed(2)}
                   </span>
                 </div>
                 
@@ -226,7 +226,7 @@ export default function CartPage() {
                   <div className="flex justify-between">
                     <span className="text-lg font-bold text-primary-800">Total</span>
                     <span className="text-lg font-bold text-golden-700">
-                      ${(cart.summary?.total || cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toFixed(2)}
+                      ₹{(cart.summary?.total || cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0)).toFixed(2)}
                     </span>
                   </div>
                 </div>

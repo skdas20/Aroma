@@ -192,12 +192,20 @@ export default function Header() {
                   <span className="text-sm text-primary-700 font-medium">
                     {user.displayName?.split(' ')[0] || 'User'}
                   </span>
-                </div>
-                {/* Dropdown Menu */}
+                </div>                {/* Dropdown Menu */}
                 <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   <div className="p-3 border-b border-gray-100">
                     <p className="text-sm font-medium text-gray-900">{user.displayName}</p>
                     <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
+                  <div className="py-1">
+                    <Link
+                      href="/orders"
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-gray-700 hover:bg-golden-50 transition-colors"
+                    >
+                      <ShoppingBag className="w-4 h-4" />
+                      <span>My Orders</span>
+                    </Link>
                   </div>
                   <button
                     onClick={logout}

@@ -7,6 +7,7 @@ import { ArrowLeft, CreditCard, Truck, MapPin, Clock, Shield, CheckCircle } from
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import Header from '@/components/Header';
+import OrderSuccessAnimation from '@/components/OrderSuccessAnimation';
 import Footer from '@/components/Footer';
 
 interface DeliveryAddress {
@@ -30,9 +31,9 @@ const CheckoutPage = () => {
   const { user, openLoginModal } = useAuth();
   const [step, setStep] = useState(1); // 1: Address, 2: Time Slot, 3: Payment, 4: Confirmation
   const [paymentMethod, setPaymentMethod] = useState('cod');
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');  const [isLoading, setIsLoading] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [showOrderSuccess, setShowOrderSuccess] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -50,12 +51,19 @@ const CheckoutPage = () => {
     zipCode: '',
     landmark: ''
   });
-
   const timeSlots: TimeSlot[] = [
-    { id: '1', time: '9:00 AM - 12:00 PM', available: true },
-    { id: '2', time: '12:00 PM - 3:00 PM', available: true },
-    { id: '3', time: '3:00 PM - 6:00 PM', available: false },
-    { id: '4', time: '6:00 PM - 9:00 PM', available: true },
+    { id: '1', time: '9:00 AM - 10:00 AM', available: true },
+    { id: '2', time: '10:00 AM - 11:00 AM', available: true },
+    { id: '3', time: '11:00 AM - 12:00 PM', available: true },
+    { id: '4', time: '12:00 PM - 1:00 PM', available: true },
+    { id: '5', time: '1:00 PM - 2:00 PM', available: true },
+    { id: '6', time: '2:00 PM - 3:00 PM', available: false },
+    { id: '7', time: '3:00 PM - 4:00 PM', available: true },
+    { id: '8', time: '4:00 PM - 5:00 PM', available: true },
+    { id: '9', time: '5:00 PM - 6:00 PM', available: true },
+    { id: '10', time: '6:00 PM - 7:00 PM', available: true },
+    { id: '11', time: '7:00 PM - 8:00 PM', available: true },
+    { id: '12', time: '8:00 PM - 9:00 PM', available: false },
   ];
 
   const handleAddressSubmit = (e: React.FormEvent) => {
@@ -70,26 +78,75 @@ const CheckoutPage = () => {
       setStep(3);
     }
   };
-
   const handlePaymentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      // Simulate order processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Generate order ID
-      const newOrderId = 'AMR' + Date.now().toString().slice(-6);
-      setOrderId(newOrderId);
+    try {      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      if (!cart || cart.items.length === 0) {
+        throw new Error('Cart is empty');
+      }
+
+      console.log('🔍 Debug checkout - User object:', user);
+      console.log('🔍 Debug checkout - User ID:', user.id);
+      console.log('🔍 Debug checkout - User email:', user.email);
+
+      // Prepare order data
+      const orderData = {
+        userId: user.id,
+        items: cart.items.map(item => ({
+          productId: item.id,
+          name: item.name,
+          brand: item.brand,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image,
+          size: '50ml' // Default size, you can make this dynamic
+        })),
+        totalAmount: cart.summary.total,
+        shippingAddress: {
+          fullName: deliveryAddress.fullName,
+          email: user.email,
+          phone: deliveryAddress.phone,
+          street: deliveryAddress.address,
+          city: deliveryAddress.city,
+          state: deliveryAddress.state,
+          zipCode: deliveryAddress.zipCode,
+          country: 'USA'
+        }
+      };
+
+      console.log('Submitting order:', orderData);
+
+      // Create order in database
+      const response = await fetch('http://localhost:5000/api/orders/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create order');
+      }
+
+      const result = await response.json();
+      console.log('✅ Order created successfully:', result);      // Set the order ID from the response
+      setOrderId(result.order.orderNumber);
       
       // Clear cart
       await clearCart();
       
-      setStep(4);
+      // Show success animation instead of going to step 4
+      setShowOrderSuccess(true);
     } catch (error) {
-      console.error('Order failed:', error);
-      alert('Order failed. Please try again.');
+      console.error('❌ Order failed:', error);
+      alert(`Order failed: ${error instanceof Error ? error.message : 'Please try again.'}`);
     } finally {
       setIsLoading(false);
     }
@@ -109,10 +166,22 @@ const CheckoutPage = () => {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-golden-50 to-nature-50">
-      <Header />      <div className="max-w-7xl mx-auto px-4 py-8">
+      <Header />
+      
+      {/* Order Success Animation */}
+      {showOrderSuccess && (
+        <OrderSuccessAnimation
+          orderNumber={orderId}
+          onClose={() => {
+            setShowOrderSuccess(false);
+            window.location.href = '/products'; // Redirect to products page
+          }}
+        />
+      )}
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 space-y-4 md:space-y-0">
           <Link href="/cart">
@@ -254,13 +323,12 @@ const CheckoutPage = () => {
                       className="w-full px-4 py-3 rounded-lg border border-golden-200 focus:ring-2 focus:ring-golden-500 focus:border-transparent"
                       placeholder="Nearby landmark"
                     />
-                  </div>
-
-                  <motion.button
+                  </div>                  <motion.button
                     type="submit"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-gradient-to-r from-golden-500 to-golden-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+                    className="w-full bg-gradient-to-r from-golden-500 to-golden-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all relative z-10"
+                    style={{ backgroundColor: '#d97706', color: '#ffffff' }}
                   >
                     Continue to Time Slot
                   </motion.button>
@@ -276,43 +344,34 @@ const CheckoutPage = () => {
                 <div className="flex items-center space-x-3 mb-6">
                   <Clock className="w-5 h-5 md:w-6 md:h-6 text-golden-600" />
                   <h2 className="text-xl md:text-2xl font-bold text-primary-800">Select Delivery Time</h2>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  {timeSlots.map((slot) => (
-                    <motion.div
-                      key={slot.id}
-                      whileHover={slot.available ? { scale: 1.02 } : {}}
-                      className={`p-3 md:p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        selectedTimeSlot === slot.id
-                          ? 'border-golden-500 bg-golden-50'
-                          : slot.available
-                          ? 'border-golden-200 hover:border-golden-300'
-                          : 'border-gray-200 bg-gray-50 cursor-not-allowed'
-                      }`}
-                      onClick={() => slot.available && setSelectedTimeSlot(slot.id)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className={`font-medium text-sm md:text-base ${
-                          slot.available ? 'text-primary-800' : 'text-gray-500'
-                        }`}>
-                          {slot.time}
-                        </span>
-                        <span className={`text-xs md:text-sm ${
-                          slot.available ? 'text-green-600' : 'text-red-500'
-                        }`}>
-                          {slot.available ? 'Available' : 'Not Available'}
-                        </span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
+                </div>                <div className="mb-6">
+                  <label className="block text-sm font-medium text-primary-700 mb-3">
+                    Select Delivery Time Slot *
+                  </label>
+                  <select
+                    value={selectedTimeSlot}
+                    onChange={(e) => setSelectedTimeSlot(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-golden-200 focus:ring-2 focus:ring-golden-500 focus:border-transparent bg-white text-primary-800 font-medium"
+                    required
+                  >
+                    <option value="">Please select a time slot</option>
+                    {timeSlots.map((slot) => (
+                      <option 
+                        key={slot.id} 
+                        value={slot.id}
+                        disabled={!slot.available}
+                        className={slot.available ? 'text-primary-800' : 'text-gray-400'}
+                      >
+                        {slot.time} {slot.available ? '(Available)' : '(Not Available)'}
+                      </option>
+                    ))}
+                  </select>
+                </div>                <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setStep(1)}
-                    className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                    className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors relative z-10"
+                    style={{ backgroundColor: '#e5e7eb', color: '#374151' }}
                   >
                     Back
                   </motion.button>
@@ -320,7 +379,8 @@ const CheckoutPage = () => {
                     whileHover={{ scale: 1.02 }}
                     onClick={handleTimeSlotSubmit}
                     disabled={!selectedTimeSlot}
-                    className="flex-1 bg-gradient-to-r from-golden-500 to-golden-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-gradient-to-r from-golden-500 to-golden-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed relative z-10"
+                    style={{ backgroundColor: '#d97706', color: '#ffffff' }}
                   >
                     Continue to Payment
                   </motion.button>
@@ -421,7 +481,8 @@ const CheckoutPage = () => {
                       type="button"
                       whileHover={{ scale: 1.02 }}
                       onClick={() => setStep(2)}
-                      className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                      className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors relative z-10"
+                      style={{ backgroundColor: '#e5e7eb', color: '#374151' }}
                     >
                       Back
                     </motion.button>
@@ -429,7 +490,8 @@ const CheckoutPage = () => {
                       type="submit"
                       whileHover={{ scale: 1.02 }}
                       disabled={isLoading}
-                      className="flex-1 bg-gradient-to-r from-golden-500 to-golden-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 bg-gradient-to-r from-golden-500 to-golden-600 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed relative z-10"
+                      style={{ backgroundColor: '#d97706', color: '#ffffff' }}
                     >
                       {isLoading ? 'Processing...' : 'Place Order'}
                     </motion.button>
@@ -468,13 +530,12 @@ const CheckoutPage = () => {
                       <span>{paymentMethod === 'cod' ? 'Cash on Delivery' : 'Card Payment'}</span>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
+                </div>                <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4">
                   <Link href="/products" className="flex-1">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
-                      className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                      className="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors relative z-10"
+                      style={{ backgroundColor: '#e5e7eb', color: '#374151' }}
                     >
                       Continue Shopping
                     </motion.button>
@@ -482,7 +543,8 @@ const CheckoutPage = () => {
                   <Link href="/" className="flex-1">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
-                      className="w-full bg-gradient-to-r from-golden-500 to-golden-600 text-white py-3 rounded-lg font-semibold"
+                      className="w-full bg-gradient-to-r from-golden-500 to-golden-600 text-white py-3 rounded-lg font-semibold relative z-10"
+                      style={{ backgroundColor: '#d97706', color: '#ffffff' }}
                     >
                       Go to Home
                     </motion.button>
@@ -510,7 +572,7 @@ const CheckoutPage = () => {
                         <div className="font-medium text-primary-800 text-sm">{item.name}</div>
                         <div className="text-primary-600 text-xs">Qty: {item.quantity}</div>
                       </div>
-                      <div className="font-semibold text-primary-800 text-sm">${(item.price * item.quantity).toFixed(2)}</div>
+                      <div className="font-semibold text-primary-800 text-sm">₹{(item.price * item.quantity).toFixed(2)}</div>
                     </div>
                   ))}
                 </div>
@@ -518,20 +580,20 @@ const CheckoutPage = () => {
                 <div className="border-t border-golden-200 pt-4 space-y-2">
                   <div className="flex justify-between text-primary-700 text-sm">
                     <span>Subtotal</span>
-                    <span>${cart.summary.subtotal.toFixed(2)}</span>
+                    <span>₹{cart.summary.subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-primary-700 text-sm">
                     <span>Shipping</span>
-                    <span>{cart.summary.shipping === 0 ? 'Free' : `$${cart.summary.shipping.toFixed(2)}`}</span>
+                    <span>{cart.summary.shipping === 0 ? 'Free' : `₹${cart.summary.shipping.toFixed(2)}`}</span>
                   </div>
                   <div className="flex justify-between text-primary-700 text-sm">
                     <span>Tax</span>
-                    <span>${cart.summary.tax.toFixed(2)}</span>
+                    <span>₹{cart.summary.tax.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-golden-200 pt-2">
                     <div className="flex justify-between text-lg md:text-xl font-bold text-primary-800">
                       <span>Total</span>
-                      <span>${cart.summary.total.toFixed(2)}</span>
+                      <span>₹{cart.summary.total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

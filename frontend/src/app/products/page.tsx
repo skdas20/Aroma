@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from "next/image";
-import { Search, Filter, ShoppingBag, Star, Heart } from 'lucide-react';
+import { Search, Filter, ShoppingBag, Star, Plus, Minus, Heart } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/contexts/CartContext';
@@ -31,13 +31,12 @@ interface Product {
 }
 
 // Component that uses useSearchParams
-function ProductsWithSearchParams() {
-  const [products, setProducts] = useState<Product[]>([]);
+function ProductsWithSearchParams() {  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
-  const { addToCart, cart } = useCart();
+  const { addToCart, updateQuantity, removeItem, cart } = useCart();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -72,16 +71,32 @@ function ProductsWithSearchParams() {
     } finally {
       setLoading(false);
     }
-  };
-  const handleAddToCart = async (product: Product) => {
+  };  const handleAddToCart = async (product: Product) => {
     try {
       await addToCart(product.id, 1);
-      // You can add a toast notification here
-      alert('Product added to cart!');
     } catch (error) {
       console.error('Error adding to cart:', error);
-      alert('Failed to add product to cart');
     }
+  };
+
+  const handleRemoveFromCart = async (productId: number) => {
+    try {
+      const cartItem = cart?.items.find(item => item.id === productId);
+      if (cartItem) {
+        if (cartItem.quantity === 1) {
+          await removeItem(cartItem.id);
+        } else {
+          await updateQuantity(cartItem.id, cartItem.quantity - 1);
+        }
+      }
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+    }
+  };
+
+  const getCartQuantity = (productId: number) => {
+    const cartItem = cart?.items.find(item => item.id === productId);
+    return cartItem?.quantity || 0;
   };
 
   const categories = ['All', 'Men', 'Women', 'Unisex'];
@@ -241,10 +256,10 @@ function ProductsWithSearchParams() {
                     {/* Price */}
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <span className="text-2xl font-bold text-golden-700">${product.price}</span>
+                        <span className="text-2xl font-bold text-golden-700">₹{product.price}</span>
                         {product.originalPrice > product.price && (
                           <span className="ml-2 text-sm text-gray-500 line-through">
-                            ${product.originalPrice}
+                            ₹{product.originalPrice}
                           </span>
                         )}
                       </div>
@@ -257,27 +272,61 @@ function ProductsWithSearchParams() {
                       }`}>
                         {product.stock > 0 ? `${product.stock} left` : 'Out of stock'}
                       </span>
-                    </div>                    {/* Add to Cart Button */}
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      disabled={product.stock === 0}
-                      className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center space-x-2 ${
-                        product.stock > 0
-                          ? 'bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 hover:from-golden-600 hover:to-golden-700 shadow-lg hover:shadow-xl transform hover:scale-105'
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      }`}
-                    >
-                      <ShoppingBag className="w-5 h-5" />                      <span>
-                        {(() => {
-                          const cartItem = cart?.items.find((item: CartItem) => item.id === product.id);
-                          return cartItem && cartItem.quantity > 0 
-                            ? `In Cart (${cartItem.quantity})`
-                            : product.stock > 0 
-                            ? 'Add to Cart' 
-                            : 'Out of Stock';
-                        })()}
-                      </span>
-                    </button>
+                    </div>                    {/* Cart Controls */}
+                    <div className="space-y-3">
+                      {product.stock > 0 && (
+                        <div className="flex items-center justify-center space-x-4">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => handleRemoveFromCart(product.id)}
+                            disabled={getCartQuantity(product.id) === 0}
+                            className="w-8 h-8 rounded-full bg-gradient-to-r from-red-200 to-red-300 flex items-center justify-center hover:from-red-300 hover:to-red-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <Minus className="w-4 h-4 text-red-700" />
+                          </motion.button>
+                          
+                          <div className="flex flex-col items-center min-w-[60px]">
+                            <span className="text-lg font-bold text-primary-800">
+                              {getCartQuantity(product.id)}
+                            </span>
+                            <span className="text-xs text-golden-600">
+                              in cart
+                            </span>
+                          </div>
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => handleAddToCart(product)}
+                            className="w-8 h-8 rounded-full bg-gradient-to-r from-golden-200 to-golden-300 flex items-center justify-center hover:from-golden-300 hover:to-golden-400 transition-all"
+                          >
+                            <Plus className="w-4 h-4 text-golden-700" />
+                          </motion.button>
+                        </div>
+                      )}
+
+                      {/* Quick Add Button (for when cart is empty or out of stock) */}
+                      {product.stock > 0 && getCartQuantity(product.id) === 0 ? (
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => handleAddToCart(product)}
+                          className="w-full py-3 bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                        >
+                          <ShoppingBag className="w-5 h-5" />
+                          <span>Add to Cart</span>
+                        </motion.button>
+                      ) : product.stock === 0 ? (
+                        <button
+                          disabled
+                          className="w-full py-3 bg-gray-300 text-gray-500 cursor-not-allowed rounded-lg font-semibold flex items-center justify-center space-x-2"
+                        >
+                          <ShoppingBag className="w-5 h-5" />
+                          <span>Out of Stock</span>
+                        </button>
+                      ) : null}
+                    </div>
                   </div>
                 </motion.div>
               ))}

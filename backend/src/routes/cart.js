@@ -12,9 +12,8 @@ router.get('/:userId', (req, res) => {
     const cart = carts[userId] || [];
     
     // Calculate cart totals
-    const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-    const shipping = subtotal > 100 ? 0 : 10; // Free shipping over $100
-    const tax = subtotal * 0.08; // 8% tax
+    const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);    const shipping = subtotal > 8300 ? 0 : 830; // Free shipping over ₹8300 (equivalent to $100)
+    const tax = subtotal * 0.18; // 18% GST in India
     const total = subtotal + shipping + tax;
 
     res.json({

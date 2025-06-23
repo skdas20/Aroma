@@ -69,12 +69,11 @@ export default function ChatBot() {
       window.removeEventListener('openChatbotQuiz', handleQuizTrigger);
     };
   }, []);
-
   const sendMessage = async (text: string, isQuizAnswer = false) => {
     if (!text.trim() && !isQuizAnswer) return;
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: `user-${Date.now()}-${Math.random()}`,
       text,
       isUser: true,
       timestamp: new Date()
@@ -93,7 +92,7 @@ export default function ChatBot() {
 
       if (response.success) {
         const botMessage: Message = {
-          id: (Date.now() + 1).toString(),
+          id: `bot-${Date.now()}-${Math.random()}`,
           text: response.response,
           isUser: false,
           timestamp: new Date(),
@@ -176,27 +175,25 @@ export default function ChatBot() {
                 <X className="w-5 h-5" />
               </button>
             </div>            {/* Messages */}
-            <div className="flex-1 p-3 md:p-4 overflow-y-auto space-y-4">
-              {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}>
+            <div className="flex-1 p-3 md:p-4 overflow-y-auto space-y-4">              {messages.map((message, index) => (
+                <div key={`${message.id}-${index}`} className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] md:max-w-[80%] p-3 rounded-lg ${
                     message.isUser 
                       ? 'bg-gradient-to-r from-golden-400 to-golden-500 text-cream-50' 
                       : 'bg-white border border-golden-200 text-primary-800'
                   }`}>
                     <p className="text-sm">{message.text}</p>
-                    
-                    {/* Product Suggestions */}
+                      {/* Product Suggestions */}
                     {message.suggestions && message.suggestions.length > 0 && (
                       <div className="mt-3 space-y-2">
-                        {message.suggestions.map((product) => (
-                          <div key={product.id} className="bg-gradient-to-r from-golden-50 to-sky-50 p-3 rounded-lg border border-golden-200">
+                        {message.suggestions.map((product, productIndex) => (
+                          <div key={`${product.id}-${productIndex}-${message.id}`} className="bg-gradient-to-r from-golden-50 to-sky-50 p-3 rounded-lg border border-golden-200">
                             <div className="flex justify-between items-start">
                               <div>
                                 <h4 className="font-semibold text-primary-800">{product.name}</h4>
                                 <p className="text-sm text-primary-600">{product.brand}</p>
                                 <div className="flex items-center space-x-2 mt-1">
-                                  <span className="text-lg font-bold text-golden-600">${product.price}</span>
+                                  <span className="text-lg font-bold text-golden-600">₹{product.price}</span>
                                   <div className="flex items-center">
                                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
                                     <span className="text-sm text-primary-600 ml-1">{product.rating}</span>
@@ -213,11 +210,10 @@ export default function ChatBot() {
                     {/* Quiz Questions */}
                     {message.quizQuestion && (
                       <div className="mt-3 space-y-2">
-                        <p className="font-semibold text-primary-800">{message.quizQuestion.question}</p>
-                        <div className="space-y-1">
+                        <p className="font-semibold text-primary-800">{message.quizQuestion.question}</p>                        <div className="space-y-1">
                           {message.quizQuestion.options.map((option, index) => (
                             <button
-                              key={index}
+                              key={`${message.id}-option-${index}`}
                               onClick={() => handleQuizAnswer(option)}
                               className="w-full text-left p-2 bg-gradient-to-r from-golden-100 to-sky-100 hover:from-golden-200 hover:to-sky-200 rounded border border-golden-200 text-sm transition-colors"
                             >
