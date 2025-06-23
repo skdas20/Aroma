@@ -12,6 +12,7 @@ import {
   Clock,
   Edit
 } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 interface Order {
   _id: string;
@@ -62,7 +63,7 @@ export default function OrdersPage() {
         searchParams.append('search', searchTerm);
       }
       
-      const response = await fetch(`http://localhost:5000/api/admin/orders?${searchParams}`);
+      const response = await fetch(apiUrl(`/api/admin/orders?${searchParams}`));
       if (response.ok) {
         const data = await response.json();
         setOrders(data.orders);
@@ -79,7 +80,7 @@ export default function OrdersPage() {
   };
   const updateOrderStatus = async (orderId: string, newStatus: Order['status'], trackingNumber?: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/status`, {
+      const response = await fetch(apiUrl(`/api/admin/orders/${orderId}/status`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

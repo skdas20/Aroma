@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Clock
 } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 interface DashboardStats {
   totalOrders: number;
@@ -72,7 +73,7 @@ export default function AdminDashboard() {
   const fetchDashboardStats = async () => {
     try {
       // Fetch real dashboard statistics from backend
-      const response = await fetch('http://localhost:5000/api/admin/stats');
+      const response = await fetch(apiUrl('/api/admin/stats'));
       if (response.ok) {
         const data = await response.json();
         setStats(data.stats);
@@ -90,7 +91,7 @@ export default function AdminDashboard() {
 
   const fetchRecentOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/recent-orders');
+      const response = await fetch(apiUrl('/api/admin/recent-orders'));
       if (response.ok) {
         const data = await response.json();
         setRecentOrders(data.orders);
@@ -102,7 +103,7 @@ export default function AdminDashboard() {
 
   const fetchRecentTickets = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/recent-tickets');
+      const response = await fetch(apiUrl('/api/admin/recent-tickets'));
       if (response.ok) {
         const data = await response.json();
         setRecentTickets(data.tickets);

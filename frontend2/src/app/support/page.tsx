@@ -12,6 +12,7 @@ import {
   Calendar,
   Reply
 } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 interface SupportTicket {
   _id: string;
@@ -51,7 +52,7 @@ export default function SupportPage() {
         searchParams.append('search', searchTerm);
       }
       
-      const response = await fetch(`http://localhost:5000/api/admin/support-tickets?${searchParams}`);
+      const response = await fetch(apiUrl(`/api/admin/support-tickets?${searchParams}`));
       if (response.ok) {
         const data = await response.json();
         setTickets(data.tickets);
@@ -69,7 +70,7 @@ export default function SupportPage() {
 
   const updateTicketStatus = async (ticketId: string, newStatus: SupportTicket['status'], adminResponse?: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/admin/support-tickets/${ticketId}/status`, {
+      const response = await fetch(apiUrl(`/api/admin/support-tickets/${ticketId}/status`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

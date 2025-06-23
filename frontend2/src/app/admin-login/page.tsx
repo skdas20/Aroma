@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 export default function AdminLogin() {
   const [credentials, setCredentials] = useState({
@@ -17,7 +18,7 @@ export default function AdminLogin() {
     e.preventDefault();
     setIsLoading(true);
     setError('');    try {
-      const response = await fetch('http://localhost:5000/api/auth/admin-login', {
+      const response = await fetch(apiUrl('/api/auth/admin-login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

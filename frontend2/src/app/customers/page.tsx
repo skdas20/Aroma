@@ -12,6 +12,7 @@ import {
   ShoppingBag,
   Eye
 } from 'lucide-react';
+import { apiUrl } from '@/lib/api';
 
 interface Customer {
   _id: string;
@@ -44,7 +45,7 @@ export default function CustomersPage() {
       if (searchTerm) {
         searchParams.append('search', searchTerm);
       }
-      const response = await fetch(`http://localhost:5000/api/admin/customers?${searchParams}`);
+      const response = await fetch(apiUrl(`/api/admin/customers?${searchParams}`));
       if (response.ok) {
         const data = await response.json();
         setCustomers(data.customers);
