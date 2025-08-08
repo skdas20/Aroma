@@ -98,15 +98,20 @@ export default function Footer() {
           className="border-t border-golden-400/30 mt-8 pt-8 text-center"
         >
           {/* Desktop Footer */}
+         <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="border-t border-golden-400/30 mt-8 pt-8 text-center"
+        >
+          {/* Desktop Footer */}
           <p className="hidden md:flex items-center justify-center gap-2 text-white">
-            © 2025 AMARAA LUXURY. Made with <Heart className="w-4 h-4 text-golden-400" /> by{' '}
-            <span className="text-golden-300 font-semibold">Sumit Kumar Das</span>
+            © 2025 AMARAA LUXURY. Made by OverClap Solutions Pvt. Ltd.
           </p>
           
           {/* Mobile Footer */}
           <p className="md:hidden flex items-center justify-center gap-2 text-white">
-            © 2025 AMARAA LUXURY. Created by{' '}
-            <span className="text-golden-300 font-semibold">Sumit Kumar Das</span>
+            © 2025 AMARAA LUXURY. Made by OverClap Solutions Pvt. Ltd.
           </p>
           
           <p className="mt-2 text-sm text-gray-300">
