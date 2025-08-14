@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Heart, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Instagram, Facebook, Twitter } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -16,17 +16,13 @@ export default function Footer() {
             transition={{ duration: 0.6 }}
             className="md:col-span-1"
           >
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-golden-400 via-golden-500 to-golden-600 rounded-full flex items-center justify-center shadow-xl">
-                <span className="text-xl font-bold text-white">A</span>
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-golden-300 to-golden-400 bg-clip-text text-transparent">
+            <div className="mb-4">
+              <span className="text-2xl font-bold text-golden-300">
                 AMARAA LUXURY
               </span>
             </div>
             <p className="text-gray-300 leading-relaxed">
-              Discover the essence of luxury with our premium collection of perfumes. 
-              Each fragrance tells a unique story of elegance and sophistication.
+              Discover our exclusive collection of luxury items. From exquisite fragrances to premium accessories, find the perfect pieces that define your style.
             </p>
             <div className="flex space-x-4 mt-6">
               <a href="#" className="text-gray-400 hover:text-golden-400 transition-colors">
@@ -91,18 +87,11 @@ export default function Footer() {
           </motion.div>
         </div>
           {/* Bottom Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="border-t border-golden-400/30 mt-8 pt-8 text-center"
-        >
-          {/* Desktop Footer */}
          <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="border-t border-golden-400/30 mt-8 pt-8 text-center"
+          className="mt-8 pt-8 text-center"
         >
           {/* Desktop Footer */}
           <p className="hidden md:flex items-center justify-center gap-2 text-white">

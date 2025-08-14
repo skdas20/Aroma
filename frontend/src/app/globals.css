@@ -5,12 +5,7 @@
   --foreground: #155e75;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+
 body {
   background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 15%, #ecfccb 30%, #fefce8 45%, #fef3c7 60%, #fed7aa 75%, #fce7f3 90%, #f3e8ff 100%);
   background-attachment: fixed;
@@ -19,25 +14,7 @@ body {
   min-height: 100vh;
 }
 
-/* Floating Animation for Bubbles */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-10px) rotate(90deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(180deg);
-  }
-  75% {
-    transform: translateY(-15px) rotate(270deg);
-  }
-}
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
 
 /* Glow Animation */
 @keyframes glow {
@@ -114,7 +91,6 @@ body::after {
   height: 200px;
   border: 4px solid #b6e3ff66;
   border-radius: 50%;
-  animation: rotate 20s linear infinite;
 }
 
 .artistic-circles::after {
@@ -126,7 +102,6 @@ body::after {
   height: 150px;
   border: 3px solid #d4af3777;
   border-radius: 50%;
-  animation: rotate 25s linear infinite reverse;
 }
 
 /* Enhanced corner designs with more visibility */
@@ -190,8 +165,7 @@ body::after {
   border-right: 40px solid transparent;
   border-bottom: 70px solid #b6e3ff33;
   transform: rotate(15deg);
-  animation: float 8s ease-in-out infinite;
-  filter: drop-shadow(0 0 12px rgba(182, 227, 255, 0.6));
+  filter: drop-shadow(0 0 10px rgba(182, 227, 255, 0.5));
 }
 
 .triangle-2 {
@@ -204,7 +178,6 @@ body::after {
   border-right: 35px solid transparent;
   border-bottom: 60px solid #d4af3755;
   transform: rotate(-25deg);
-  animation: float 12s ease-in-out infinite reverse;
   filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
 }
 
@@ -218,7 +191,6 @@ body::after {
   border-right: 32px solid transparent;
   border-bottom: 55px solid #22c55e33;
   transform: rotate(35deg);
-  animation: float 10s ease-in-out infinite;
   filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));
 }
 
@@ -232,7 +204,6 @@ body::after {
   background: linear-gradient(45deg, #22c55e33, #b6e3ff33);
   transform: rotate(45deg);
   border-radius: 10px;
-  animation: rotate 15s linear infinite;
   filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.5));
 }
 
@@ -245,7 +216,6 @@ body::after {
   background: linear-gradient(45deg, #f7e9c055, #d4af3755);
   transform: rotate(45deg);
   border-radius: 8px;
-  animation: rotate 18s linear infinite reverse;
   filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
 }
 
@@ -258,7 +228,6 @@ body::after {
   background: linear-gradient(45deg, #b6e3ff33, #22c55e33);
   transform: rotate(45deg);
   border-radius: 7px;
-  animation: rotate 22s linear infinite;
   filter: drop-shadow(0 0 10px rgba(182, 227, 255, 0.5));
 }
 
@@ -272,7 +241,6 @@ body::after {
   background: #b6e3ff33;
   position: relative;
   border-radius: 6px;
-  animation: float 10s ease-in-out infinite;
   filter: drop-shadow(0 0 12px rgba(182, 227, 255, 0.6));
 }
 
@@ -304,8 +272,7 @@ body::after {
   background: #d4af3733;
   position: relative;
   border-radius: 5px;
-  animation: float 14s ease-in-out infinite reverse;
-  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
+  filter: drop-shadow(0 0 7px rgba(212, 175, 55, 0.4));
 }
 
 .hexagon-2::before,
@@ -337,8 +304,6 @@ body::after {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   border-bottom: 12px solid #f7e9c033;
-  transform: rotate(35deg);
-  animation: rotate 20s linear infinite;
   filter: drop-shadow(0 0 5px rgba(247, 233, 192, 0.5));
 }
 
@@ -352,7 +317,6 @@ body::after {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   border-bottom: 12px solid #f7e9c033;
-  transform: rotate(-70deg);
 }
 
 .star-2 {
@@ -365,7 +329,6 @@ body::after {
   border-right: 12px solid transparent;
   border-bottom: 10px solid #22c55e22;
   transform: rotate(-15deg);
-  animation: rotate 16s linear infinite reverse;
   filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.4));
 }
 
@@ -379,7 +342,6 @@ body::after {
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
   border-bottom: 10px solid #22c55e22;
-  transform: rotate(-70deg);
 }
 
 /* Enhanced wave patterns with more visibility */
@@ -390,7 +352,6 @@ body::after {
   width: 100%;
   height: 3px;
   background: linear-gradient(90deg, transparent 0%, #b6e3ff22 50%, transparent 100%);
-  animation: wave 6s ease-in-out infinite;
   filter: drop-shadow(0 0 4px rgba(182, 227, 255, 0.3));
 }
 
@@ -401,7 +362,6 @@ body::after {
   width: 100%;
   height: 2px;
   background: linear-gradient(90deg, transparent 0%, #d4af3733 50%, transparent 100%);
-  animation: wave 8s ease-in-out infinite reverse;
   filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.4));
 }
 
@@ -412,8 +372,7 @@ body::after {
   width: 100%;
   height: 2px;
   background: linear-gradient(90deg, transparent 0%, #22c55e22 50%, transparent 100%);
-  animation: wave 10s ease-in-out infinite;
-  filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.3));
+  filter: drop-shadow(0 0 2px rgba(34, 197, 94, 0.3));
 }
 
 /* Enhanced circle patterns with more visibility */
@@ -425,8 +384,7 @@ body::after {
   height: 80px;
   border: 3px dashed #b6e3ff33;
   border-radius: 50%;
-  animation: rotate 30s linear infinite;
-  filter: drop-shadow(0 0 8px rgba(182, 227, 255, 0.5));
+  filter: drop-shadow(0 0 8px rgba(182, 227, 255, 0.4));
 }
 
 .circle-pattern-2 {
@@ -437,7 +395,6 @@ body::after {
   height: 70px;
   border: 3px dotted #d4af3733;
   border-radius: 50%;
-  animation: rotate 25s linear infinite reverse;
   filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.5));
 }
 
@@ -450,7 +407,6 @@ body::after {
   height: 60px;
   border: 2px solid #22c55e33;
   border-radius: 50%;
-  animation: float 14s ease-in-out infinite;
   filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.4));
 }
 
@@ -462,7 +418,6 @@ body::after {
   height: 90px;
   border: 2px double #f7e9c033;
   border-radius: 50%;
-  animation: rotate 35s linear infinite;
   filter: drop-shadow(0 0 7px rgba(247, 233, 192, 0.4));
 }
 
@@ -475,7 +430,6 @@ body::after {
   height: 35px;
   background: #b6e3ff33;
   clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-  animation: float 12s ease-in-out infinite;
   filter: drop-shadow(0 0 6px rgba(182, 227, 255, 0.4));
 }
 
@@ -487,7 +441,6 @@ body::after {
   height: 32px;
   background: #d4af3733;
   clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-  animation: float 16s ease-in-out infinite reverse;
   filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
 }
 
@@ -500,7 +453,6 @@ body::after {
   height: 48px;
   background: #22c55e22;
   clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-  animation: rotate 20s linear infinite;
   filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.3));
 }
 
@@ -512,7 +464,6 @@ body::after {
   height: 42px;
   background: #f7e9c033;
   clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-  animation: rotate 24s linear infinite reverse;
   filter: drop-shadow(0 0 4px rgba(247, 233, 192, 0.3));
 }
 
@@ -526,7 +477,6 @@ body::after {
   background: linear-gradient(45deg, #b6e3ff22, #22c55e22);
   border-radius: 50%;
   transform: rotate(25deg);
-  animation: float 10s ease-in-out infinite;
   filter: drop-shadow(0 0 6px rgba(182, 227, 255, 0.3));
 }
 
@@ -539,7 +489,6 @@ body::after {
   background: linear-gradient(45deg, #d4af3733, #f7e9c022);
   border-radius: 50%;
   transform: rotate(-35deg);
-  animation: float 14s ease-in-out infinite reverse;
   filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
 }
 
@@ -553,7 +502,6 @@ body::after {
   background: #b6e3ff33;
   border-radius: 50%;
   position: relative;
-  animation: rotate 28s linear infinite;
   filter: drop-shadow(0 0 5px rgba(182, 227, 255, 0.4));
 }
 
@@ -577,7 +525,6 @@ body::after {
   background: #d4af3733;
   border-radius: 50%;
   position: relative;
-  animation: rotate 32s linear infinite reverse;
   filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.4));
 }
 

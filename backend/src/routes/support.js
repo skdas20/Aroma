@@ -50,7 +50,7 @@ router.post('/create', async (req, res) => {
 
     await ticket.save();
 
-    console.log(`✅ Support ticket created: ${ticketNumber} for user ${user.email}`);
+    console.log(` Support ticket created: ${ticketNumber} for user ${user.email}`);
 
     res.status(201).json({
       success: true,
@@ -65,7 +65,7 @@ router.post('/create', async (req, res) => {
       message: 'Support ticket created successfully'
     });
   } catch (error) {
-    console.error('❌ Support ticket creation error:', error);
+    console.error(' Support ticket creation error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to create support ticket',
@@ -108,7 +108,7 @@ router.get('/all', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('❌ Support tickets fetch error:', error);
+    console.error(' Support tickets fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch support tickets',
@@ -127,14 +127,14 @@ router.get('/user/:email', async (req, res) => {
     const tickets = await SupportTicket.find({ customerEmail: email })
       .sort({ createdAt: -1 });
 
-    console.log(`✅ Found ${tickets.length} tickets for user ${email}`);
+    console.log(` Found ${tickets.length} tickets for user ${email}`);
 
     res.json({
       success: true,
       tickets
     });
   } catch (error) {
-    console.error('❌ User tickets fetch error:', error);
+    console.error(' User tickets fetch error:', error);
     res.status(500).json({
       success: false,      message: 'Failed to fetch user tickets',
       error: error.message
@@ -164,7 +164,7 @@ router.post('/:ticketId/respond', async (req, res) => {
 
     await ticket.addResponse(message, author, isAdmin);
 
-    console.log(`✅ Response added to ticket ${ticket.ticketNumber}`);
+    console.log(` Response added to ticket ${ticket.ticketNumber}`);
 
     res.json({
       success: true,
@@ -172,7 +172,7 @@ router.post('/:ticketId/respond', async (req, res) => {
       message: 'Response added successfully'
     });
   } catch (error) {
-    console.error('❌ Response add error:', error);
+    console.error(' Response add error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to add response',
@@ -201,7 +201,7 @@ router.get('/:ticketId', async (req, res) => {
       ticket
     });
   } catch (error) {
-    console.error('❌ Single ticket fetch error:', error);
+    console.error(' Single ticket fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch ticket',
@@ -225,14 +225,14 @@ router.put('/:ticketId/status', async (req, res) => {
 
     await ticket.updateStatus(status, assignedTo);
 
-    console.log(`✅ Ticket ${ticket.ticketNumber} status updated to ${status}`);
+    console.log(` Ticket ${ticket.ticketNumber} status updated to ${status}`);
 
     res.json({
       success: true,
       ticket,
       message: 'Ticket status updated successfully'    });
   } catch (error) {
-    console.error('❌ Ticket status update error:', error);
+    console.error(' Ticket status update error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to update ticket status',

@@ -1,27 +1,24 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const connectDatabase = require('./src/config/database');
+const { connectDatabase } = require('./src/config/database');
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 
-// Global variable to track database status
-global.useMockDatabase = false;
-
-// Try to connect to MongoDB
+// Connect to PostgreSQL via Prisma
 connectDatabase().catch((error) => {
-  console.log('❌ MongoDB connection failed:', error.message);
-  console.log('📝 Using mock database for development');
-  global.useMockDatabase = true;
+  console.error(' Database connection failed:', error.message);
+  process.exit(1);
 });
 
 // Middleware
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:3002',
   'http://localhost:3001',
   'https://aroma-blush.vercel.app',
   'https://aroma-ipst.vercel.app',
@@ -51,7 +48,7 @@ app.get('/api/health', (req, res) => {
     status: 'OK', 
     message: 'Aroma Perfume Backend is running!',
     timestamp: new Date().toISOString(),
-    database: global.useMockDatabase ? 'Mock Database' : 'MongoDB Connected'
+    database: 'PostgreSQL Connected'
   });
 });
 

@@ -55,7 +55,7 @@ router.get('/stats', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Dashboard stats error:', error);
+    console.error(' Dashboard stats error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch dashboard statistics',
@@ -86,7 +86,7 @@ router.get('/recent-orders', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Recent orders fetch error:', error);
+    console.error(' Recent orders fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch recent orders',
@@ -116,7 +116,7 @@ router.get('/recent-tickets', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Recent tickets fetch error:', error);
+    console.error(' Recent tickets fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch recent tickets',
@@ -188,7 +188,7 @@ router.get('/orders', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Admin orders fetch error:', error);
+    console.error(' Admin orders fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch orders',
@@ -225,7 +225,7 @@ router.put('/orders/:orderId/status', async (req, res) => {
         });
       }
 
-      console.log(`✅ Order ${order.orderNumber} status updated to ${status}`);
+      console.log(` Order ${order.orderNumber} status updated to ${status}`);
 
       res.json({
         success: true,
@@ -251,7 +251,7 @@ router.put('/orders/:orderId/status', async (req, res) => {
         });
       }
 
-      console.log(`✅ Order ${order.orderNumber} status updated to ${status}`);
+      console.log(` Order ${order.orderNumber} status updated to ${status}`);
 
       res.json({
         success: true,
@@ -260,7 +260,7 @@ router.put('/orders/:orderId/status', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Order status update error:', error);
+    console.error(' Order status update error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to update order status',
@@ -336,7 +336,7 @@ router.get('/support-tickets', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Admin support tickets fetch error:', error);
+    console.error(' Admin support tickets fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch support tickets',
@@ -376,7 +376,7 @@ router.put('/support-tickets/:ticketId/status', async (req, res) => {
         });
       }
 
-      console.log(`✅ Support ticket ${ticket.ticketNumber} status updated to ${status}`);
+      console.log(` Support ticket ${ticket.ticketNumber} status updated to ${status}`);
 
       res.json({
         success: true,
@@ -403,7 +403,7 @@ router.put('/support-tickets/:ticketId/status', async (req, res) => {
         });
       }
 
-      console.log(`✅ Support ticket ${ticket.ticketNumber} status updated to ${status}`);
+      console.log(` Support ticket ${ticket.ticketNumber} status updated to ${status}`);
 
       res.json({
         success: true,
@@ -412,7 +412,7 @@ router.put('/support-tickets/:ticketId/status', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Support ticket status update error:', error);
+    console.error(' Support ticket status update error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to update support ticket status',
@@ -479,7 +479,7 @@ router.get('/customers', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('❌ Admin customers fetch error:', error);
+    console.error(' Admin customers fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch customers',

@@ -10,6 +10,83 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/contexts/CartContext';
 
+const SparklesEffect = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+  const sparkles = Array.from({ length: 20 });
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {sparkles.map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute"
+          style={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            scale: Math.random() * 0.5 + 0.5,
+          }}
+          initial={{ opacity: 0, y: 0 }}
+          animate={{
+            opacity: [0, 1, 0],
+            y: [0, -20, 0],
+          }}
+          transition={{
+            duration: Math.random() * 2 + 2,
+            repeat: Infinity,
+            delay: Math.random() * 3,
+            ease: 'easeInOut',
+          }}
+        >
+          <Sparkles className="w-3 h-3 text-golden-400" />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
+const SprayEffect = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  if (!isMounted) return null;
+
+  return (
+    <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="absolute inset-0">
+      {isHovered && Array.from({ length: 30 }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-golden-300/80"
+          style={{
+            top: '50%',
+            left: '50%',
+            width: `${Math.random() * 3 + 1}px`,
+            height: `${Math.random() * 3 + 1}px`,
+          }}
+          initial={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+          animate={{
+            x: `calc(-50% + ${(Math.random() - 0.5) * 200}px)`,
+            y: `calc(-50% + ${(Math.random() - 0.5) * 200}px)`,
+            opacity: 0,
+            scale: 0
+          }}
+          transition={{
+            duration: Math.random() * 0.8 + 0.5,
+            ease: "easeOut"
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const { cartItemCount } = useCart();
@@ -35,23 +112,23 @@ export default function Home() {
         {/* Shiny Golden-Green Bubbles Background */}
         <div className="absolute inset-0 opacity-40">
           {/* Large Golden Bubbles */}
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-golden-300 via-golden-400 to-golden-500 rounded-full blur-3xl animate-float shadow-2xl" style={{ boxShadow: '0 0 60px rgba(255, 215, 0, 0.6)' }}></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-nature-300 via-nature-400 to-golden-400 rounded-full blur-2xl animate-float shadow-2xl" style={{ animationDelay: '2s', boxShadow: '0 0 40px rgba(34, 197, 94, 0.5)' }}></div>
-          <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-gradient-to-br from-golden-400 via-nature-300 to-sky-400 rounded-full blur-2xl animate-float shadow-xl" style={{ animationDelay: '4s', boxShadow: '0 0 30px rgba(255, 193, 7, 0.7)' }}></div>
+          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-golden-300 via-golden-400 to-golden-500 rounded-full blur-3xl shadow-2xl" style={{ boxShadow: '0 0 60px rgba(255, 215, 0, 0.6)' }}></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-nature-300 via-nature-400 to-golden-400 rounded-full blur-2xl shadow-2xl" style={{ boxShadow: '0 0 40px rgba(34, 197, 94, 0.5)' }}></div>
+          <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-gradient-to-br from-golden-400 via-nature-300 to-sky-400 rounded-full blur-2xl shadow-xl" style={{ boxShadow: '0 0 30px rgba(255, 193, 7, 0.7)' }}></div>
           
           {/* Medium Shiny Bubbles */}
-          <div className="absolute top-60 right-1/3 w-16 h-16 bg-gradient-to-br from-golden-200 via-nature-200 to-golden-300 rounded-full blur-xl animate-float shadow-lg" style={{ animationDelay: '1s', boxShadow: '0 0 25px rgba(255, 235, 59, 0.6)' }}></div>
-          <div className="absolute bottom-60 right-10 w-14 h-14 bg-gradient-to-br from-nature-400 via-golden-300 to-nature-500 rounded-full blur-xl animate-float shadow-lg" style={{ animationDelay: '3s', boxShadow: '0 0 20px rgba(76, 175, 80, 0.5)' }}></div>
-          <div className="absolute top-1/2 left-20 w-12 h-12 bg-gradient-to-br from-golden-300 via-sunshine-300 to-golden-400 rounded-full blur-lg animate-float shadow-md" style={{ animationDelay: '5s', boxShadow: '0 0 18px rgba(255, 214, 0, 0.8)' }}></div>
+          <div className="absolute top-60 right-1/3 w-16 h-16 bg-gradient-to-br from-golden-200 via-nature-200 to-golden-300 rounded-full blur-xl shadow-lg" style={{ boxShadow: '0 0 25px rgba(255, 235, 59, 0.6)' }}></div>
+          <div className="absolute bottom-60 right-10 w-14 h-14 bg-gradient-to-br from-nature-400 via-golden-300 to-nature-500 rounded-full blur-xl shadow-lg" style={{ boxShadow: '0 0 20px rgba(76, 175, 80, 0.5)' }}></div>
+          <div className="absolute top-1/2 left-20 w-12 h-12 bg-gradient-to-br from-golden-300 via-sunshine-300 to-golden-400 rounded-full blur-lg shadow-md" style={{ boxShadow: '0 0 18px rgba(255, 214, 0, 0.8)' }}></div>
           
           {/* Small Sparkling Bubbles */}
-          <div className="absolute top-32 left-1/3 w-8 h-8 bg-gradient-to-br from-golden-400 to-nature-400 rounded-full blur-md animate-float shadow-sm" style={{ animationDelay: '0.5s', boxShadow: '0 0 15px rgba(255, 193, 7, 0.9)' }}></div>
-          <div className="absolute bottom-32 left-2/3 w-6 h-6 bg-gradient-to-br from-nature-300 to-golden-300 rounded-full blur-sm animate-float shadow-sm" style={{ animationDelay: '2.5s', boxShadow: '0 0 12px rgba(139, 195, 74, 0.7)' }}></div>
-          <div className="absolute top-1/4 right-1/4 w-10 h-10 bg-gradient-to-br from-sunshine-300 via-golden-300 to-nature-300 rounded-full blur-lg animate-float shadow-md" style={{ animationDelay: '1.5s', boxShadow: '0 0 16px rgba(255, 235, 59, 0.8)' }}></div>
+          <div className="absolute top-32 left-1/3 w-8 h-8 bg-gradient-to-br from-golden-400 to-nature-400 rounded-full blur-md shadow-sm" style={{ boxShadow: '0 0 15px rgba(255, 193, 7, 0.9)' }}></div>
+          <div className="absolute bottom-32 left-2/3 w-6 h-6 bg-gradient-to-br from-nature-300 to-golden-300 rounded-full blur-sm shadow-sm" style={{ boxShadow: '0 0 12px rgba(139, 195, 74, 0.7)' }}></div>
+          <div className="absolute top-1/4 right-1/4 w-10 h-10 bg-gradient-to-br from-sunshine-300 via-golden-300 to-nature-300 rounded-full blur-lg shadow-md" style={{ boxShadow: '0 0 16px rgba(255, 235, 59, 0.8)' }}></div>
           
           {/* Extra Tiny Sparkling Dots */}
-          <div className="absolute top-16 right-16 w-4 h-4 bg-gradient-to-br from-golden-500 to-golden-600 rounded-full animate-float shadow-sm" style={{ animationDelay: '3.5s', boxShadow: '0 0 8px rgba(255, 193, 7, 1)' }}></div>
-          <div className="absolute bottom-16 left-16 w-3 h-3 bg-gradient-to-br from-nature-500 to-nature-600 rounded-full animate-float shadow-sm" style={{ animationDelay: '4.5s', boxShadow: '0 0 6px rgba(76, 175, 80, 1)' }}></div>
+          <div className="absolute top-16 right-16 w-4 h-4 bg-gradient-to-br from-golden-500 to-golden-600 rounded-full shadow-sm" style={{ boxShadow: '0 0 8px rgba(255, 193, 7, 1)' }}></div>
+          <div className="absolute bottom-16 left-16 w-3 h-3 bg-gradient-to-br from-nature-500 to-nature-600 rounded-full shadow-sm" style={{ boxShadow: '0 0 6px rgba(76, 175, 80, 1)' }}></div>
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
@@ -63,46 +140,20 @@ export default function Home() {
               className="order-2 lg:order-1"
             >
               <div className="relative">
-                {/* Spray particles that appear around the text */}
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-gradient-to-br from-golden-400 to-nature-400 rounded-full opacity-60"
-                    initial={{ 
-                      opacity: 0, 
-                      x: 0, 
-                      y: 0, 
-                      scale: 0 
-                    }}
-                    animate={{ 
-                      opacity: [0, 0.8, 0.3, 0],
-                      x: [0, (Math.random() - 0.5) * 100],
-                      y: [0, (Math.random() - 0.5) * 80],
-                      scale: [0, 1.5, 0.8, 0],
-                    }}
-                    transition={{ 
-                      duration: 2.5,
-                      delay: i * 0.3,
-                      repeat: Infinity,
-                      repeatDelay: 3
-                    }}
-                    style={{
-                      left: `${20 + Math.random() * 60}%`,
-                      top: `${30 + Math.random() * 40}%`,
-                      boxShadow: '0 0 6px rgba(255, 215, 0, 0.7)'
-                    }}
-                  />
-                ))}
+                {/* Floating sparkles effect */}
+                <div className="absolute -top-10 -left-10 z-0">
+                  <SparklesEffect />
+                </div>
                 
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight mb-6 relative z-10">
                   <div>
                     {['D','i','s','c','o','v','e','r'].map((letter, index) => (
                       <motion.span
                         key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 + index * 0.05 }}
                         className="text-golden-600 font-black drop-shadow-xl inline-block"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.15, delay: 0.5 + index * 0.1 }}
                       >
                         {letter}
                       </motion.span>
@@ -110,53 +161,65 @@ export default function Home() {
                   </div>
                   <div>
                     <motion.span
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.7 }}
                       className="text-primary-800 inline-block"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.15, delay: 1.3 }}
                     >
                       Your
                     </motion.span>
                     <motion.span
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.75 }}
                       className="inline-block"
                       style={{ width: '0.75rem' }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.15, delay: 1.7 }}
                     >
                       {' '}
                     </motion.span>
                     <motion.span
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.8 }}
                       className="text-primary-800 inline-block"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.15, delay: 1.8 }}
                     >
                       Perfect
                     </motion.span>
                   </div>
                   <motion.span
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.9 }}
                     className="text-golden-600 font-black drop-shadow-xl block"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.15, delay: 2.3 }}
                   >
                     Luxury
                   </motion.span>
                 </h1>
               </div>
-              <p className="text-xl text-primary-700 mb-8 leading-relaxed">
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+                className="text-xl text-primary-700 mb-8 leading-relaxed"
+              >
                 Discover our exclusive collection of luxury items. 
                 From exquisite fragrances to premium accessories, find the perfect pieces that define your style.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-golden-500 via-golden-600 to-golden-700 text-cream-50 px-8 py-4 rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all animate-glow"
-                >
-                  Shop Now
-                </motion.button>
+              </motion.p>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.1 }}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <Link href="/products">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-gradient-to-r from-golden-500 via-golden-600 to-golden-700 text-cream-50 px-8 py-4 rounded-full font-semibold shadow-xl hover:shadow-2xl transition-all animate-glow"
+                  >
+                    Shop Now
+                  </motion.button>
+                </Link>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -169,7 +232,7 @@ export default function Home() {
                 >
                   Take Quiz
                 </motion.button>
-              </div>
+              </motion.div>
             </motion.div>
             
             {/* Interactive Shiny Logo */}
@@ -248,8 +311,8 @@ export default function Home() {
                         key={i}
                         className="absolute w-2 h-2 bg-gradient-to-br from-golden-400 to-golden-600 rounded-full"
                         animate={{
-                          x: [0, Math.cos(i * 60 * Math.PI / 180) * 100],
-                          y: [0, Math.sin(i * 60 * Math.PI / 180) * 100],
+                          x: [0, Math.cos(i * 60 * Math.PI / 180) * 160],
+                          y: [0, Math.sin(i * 60 * Math.PI / 180) * 160],
                           scale: [0, 1, 0],
                           opacity: [0, 1, 0]
                         }}

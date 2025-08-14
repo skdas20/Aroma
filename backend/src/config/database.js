@@ -1,32 +1,30 @@
-const mongoose = require('mongoose');
+const { PrismaClient } = require('@prisma/client');
 
-const connectDatabase = async () => {
+// Singleton Prisma client
+let prisma;
+if (!global.__prisma) {
+  global.__prisma = new PrismaClient();
+}
+prisma = global.__prisma;
+
+async function connectDatabase() {
   try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/aroma-perfume';
-      await mongoose.connect(mongoURI);
-    
-    console.log('✅ MongoDB Connected Successfully');
-    console.log(`📊 Database: ${mongoose.connection.name}`);
-    
-    // Handle connection events
-    mongoose.connection.on('error', (err) => {
-      console.error('❌ MongoDB connection error:', err);
-    });
-    
-    mongoose.connection.on('disconnected', () => {
-      console.log('⚠️ MongoDB disconnected');
-    });
-    
-    // Graceful shutdown
-    process.on('SIGINT', async () => {
-      await mongoose.connection.close();
-      console.log('🔌 MongoDB connection closed through app termination');
-      process.exit(0);
-    });
-      } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
-    throw error; // Throw error instead of exiting, let server handle it
+    await prisma.$connect();
+    console.log(' PostgreSQL connected successfully via Prisma');
+  } catch (error) {
+    console.error(' PostgreSQL connection error:', error.message);
+    throw error;
   }
-};
+}
 
-module.exports = connectDatabase;
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  try {
+    await prisma.$disconnect();
+    console.log('🔌 Prisma disconnected through app termination');
+  } catch (_) {}
+  process.exit(0);
+});
+
+// Export prisma client and connector
+module.exports = { prisma, connectDatabase };

@@ -28,11 +28,10 @@ export default function Header() {
       hasDropdown: true,
       dropdownItems: [
         { name: 'Fragrances', href: '/products', available: true },
+        { name: 'Skincare', href: '#', available: false },
+        { name: 'Colour Cosmetics', href: '#', available: false },
+        { name: 'Mechanical Watches', href: '#', available: false },
         { name: 'Bags', href: '#', available: false },
-        { name: 'Glasses', href: '#', available: false },
-        { name: 'Clothing', href: '#', available: false },
-        { name: 'Shoes', href: '#', available: false },
-        { name: 'Accessories', href: '#', available: false },
       ]
     },
     { name: 'Men', href: '/men' },

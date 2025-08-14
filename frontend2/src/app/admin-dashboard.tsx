@@ -211,7 +211,7 @@ export default function AdminDashboard() {
             </p>
             <div className="flex justify-between text-sm">
               <span className="text-red-600">🔴 {stats.openTickets} Open</span>
-              <span className="text-green-600">✅ Quick Response</span>
+              <span className="text-green-600"> Quick Response</span>
             </div>
           </Link>
 

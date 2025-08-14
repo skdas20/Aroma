@@ -8,7 +8,7 @@ echo "========================================"
 
 # Check if we're in the right directory
 if [ ! -f "package.json" ]; then
-    echo "❌ Error: This script should be run from the backend directory"
+    echo " Error: This script should be run from the backend directory"
     echo "Please navigate to the backend folder and try again"
     exit 1
 fi
@@ -17,7 +17,7 @@ echo "📋 Checking backend configuration..."
 
 # Check if .env.example exists
 if [ ! -f ".env.example" ]; then
-    echo "❌ Error: .env.example file not found"
+    echo " Error: .env.example file not found"
     exit 1
 fi
 
@@ -25,24 +25,24 @@ fi
 if [ ! -f ".env" ]; then
     echo "📝 Creating .env file from template..."
     cp .env.example .env
-    echo "✅ .env file created! Please fill in your actual values."
+    echo " .env file created! Please fill in your actual values."
 else
-    echo "✅ .env file already exists"
+    echo " .env file already exists"
 fi
 
 # Check package.json scripts
 echo "📦 Checking package.json scripts..."
 if grep -q '"start": "node server.js"' package.json; then
-    echo "✅ Start script configured correctly"
+    echo " Start script configured correctly"
 else
-    echo "❌ Warning: Start script may need adjustment for deployment"
+    echo " Warning: Start script may need adjustment for deployment"
 fi
 
 # Check if server.js exists
 if [ -f "server.js" ]; then
-    echo "✅ Server entry point found"
+    echo " Server entry point found"
 else
-    echo "❌ Error: server.js not found"
+    echo " Error: server.js not found"
     exit 1
 fi
 
@@ -56,4 +56,4 @@ echo "5. Deploy to Render (backend) and Vercel (frontend)"
 echo ""
 echo "📖 See DEPLOYMENT-GUIDE.md for detailed instructions"
 echo ""
-echo "✅ Pre-deployment setup complete!"
+echo " Pre-deployment setup complete!"

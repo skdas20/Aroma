@@ -1,65 +1,84 @@
 const express = require('express');
+const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
-const perfumes = require('../data/perfumes');
 
-// Get all products with optional filtering
-router.get('/', (req, res) => {
+const prisma = new PrismaClient();
+
+// Get all products with filtering, searching, sorting, and pagination
+router.get('/', async (req, res) => {
   try {
-    const { category, search, minPrice, maxPrice, sort } = req.query;
-    let filteredPerfumes = [...perfumes];
+    const { search, category, minPrice, maxPrice, sort, page = 1, limit = 20 } = req.query;
+    const take = parseInt(limit);
+    const skip = (parseInt(page) - 1) * take;
+    
+    let where = {};
+    let orderBy = {};
 
-    // Filter by category
-    if (category && category !== 'All') {
-      filteredPerfumes = filteredPerfumes.filter(
-        perfume => perfume.category.toLowerCase() === category.toLowerCase()
-      );
+    // Search by name or description
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }
+      ];
     }
 
-    // Search by name or brand
-    if (search) {
-      const searchTerm = search.toLowerCase();
-      filteredPerfumes = filteredPerfumes.filter(
-        perfume => 
-          perfume.name.toLowerCase().includes(searchTerm) ||
-          perfume.brand.toLowerCase().includes(searchTerm) ||
-          perfume.description.toLowerCase().includes(searchTerm)
-      );
+    // Filter by category
+    if (category && category.toLowerCase() !== 'all') {
+      where.category = {
+        equals: category, 
+        mode: 'insensitive'
+      };
     }
 
     // Price range filter
-    if (minPrice) {
-      filteredPerfumes = filteredPerfumes.filter(perfume => perfume.price >= parseFloat(minPrice));
-    }
-    if (maxPrice) {
-      filteredPerfumes = filteredPerfumes.filter(perfume => perfume.price <= parseFloat(maxPrice));
+    if (minPrice || maxPrice) {
+      where.price = {};
+      if (minPrice) where.price.gte = parseFloat(minPrice);
+      if (maxPrice) where.price.lte = parseFloat(maxPrice);
     }
 
     // Sort products
-    if (sort) {
-      switch (sort) {
-        case 'price-low':
-          filteredPerfumes.sort((a, b) => a.price - b.price);
-          break;
-        case 'price-high':
-          filteredPerfumes.sort((a, b) => b.price - a.price);
-          break;
-        case 'rating':
-          filteredPerfumes.sort((a, b) => b.rating - a.rating);
-          break;
-        case 'name':
-          filteredPerfumes.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-        default:
-          break;
-      }
+    switch (sort) {
+      case 'price-asc':
+        orderBy = { price: 'asc' };
+        break;
+      case 'price-desc':
+        orderBy = { price: 'desc' };
+        break;
+      case 'name-asc':
+        orderBy = { name: 'asc' };
+        break;
+      case 'name-desc':
+        orderBy = { name: 'desc' };
+        break;
+      default:
+        orderBy = { numericId: 'asc' }; // Default sort by original order
+        break;
     }
+
+    const [total, products] = await Promise.all([
+      prisma.product.count({ where }),
+      prisma.product.findMany({
+        where,
+        orderBy,
+        skip,
+        take
+      })
+    ]);
 
     res.json({
       success: true,
-      products: filteredPerfumes,
-      total: filteredPerfumes.length
+      products,
+      pagination: {
+        page: parseInt(page),
+        limit: take,
+        total,
+        hasNext: skip + products.length < total,
+        hasPrev: parseInt(page) > 1
+      }
     });
   } catch (error) {
+    console.error(' Products fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching products',
@@ -69,10 +88,11 @@ router.get('/', (req, res) => {
 });
 
 // Get single product by ID
-router.get('/:id', (req, res) => {
+router.get('/:pid', async (req, res) => {
   try {
-    const productId = parseInt(req.params.id);
-    const product = perfumes.find(p => p.id === productId);
+    const product = await prisma.product.findUnique({
+      where: { pid: req.params.pid }
+    });
 
     if (!product) {
       return res.status(404).json({
@@ -86,6 +106,7 @@ router.get('/:id', (req, res) => {
       product
     });
   } catch (error) {
+    console.error(' Product fetch error:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching product',
@@ -94,18 +115,92 @@ router.get('/:id', (req, res) => {
   }
 });
 
-// Get product categories
-router.get('/categories/list', (req, res) => {
+// Create new product (for admin purposes)
+router.post('/', async (req, res) => {
   try {
-    const categories = [...new Set(perfumes.map(p => p.category))];
-    res.json({
+    const { numericId, name, brand, category, description, price, originalPrice, image, images, notes, size, stock, rating, reviews } = req.body;
+
+    // Basic validation
+    if (!numericId || !name || !price) {
+      return res.status(400).json({
+        success: false,
+        message: 'Numeric ID, Name and Price are required'
+      });
+    }
+
+    const product = await prisma.product.create({
+      data: {
+        numericId,
+        name,
+        brand,
+        category,
+        description,
+        price,
+        originalPrice,
+        image,
+        images,
+        notes,
+        size,
+        stock,
+        rating,
+        reviews
+      }
+    });
+
+    res.status(201).json({
       success: true,
-      categories: ['All', ...categories]
+      product,
+      message: 'Product created successfully'
     });
   } catch (error) {
+    console.error(' Product creation error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error fetching categories',
+      message: 'Error creating product',
+      error: error.message
+    });
+  }
+});
+
+// Update product (for admin purposes)
+router.put('/:pid', async (req, res) => {
+  try {
+    const product = await prisma.product.update({
+      where: { pid: req.params.pid },
+      data: req.body // Allows updating any field provided in the body
+    });
+
+    res.json({
+      success: true,
+      product,
+      message: 'Product updated successfully'
+    });
+  } catch (error) {
+    console.error(' Product update error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating product',
+      error: error.message
+    });
+  }
+});
+
+// Delete product (for admin purposes)
+router.delete('/:pid', async (req, res) => {
+  try {
+    await prisma.product.delete({
+      where: { pid: req.params.pid }
+    });
+
+    res.json({
+      success: true,
+      message: 'Product deleted successfully'
+    });
+  } catch (error) {
+    console.error(' Product deletion error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting product',
       error: error.message
     });
   }

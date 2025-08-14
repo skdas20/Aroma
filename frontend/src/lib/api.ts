@@ -66,7 +66,7 @@ export const api = {
       });
     }
     
-    const response = await fetch(`${API_BASE_URL}/products?${searchParams}`);
+    const response = await fetch(`${API_BASE_URL}/products?${searchParams}`, { cache: 'no-store' });
     return response.json();
   },
 

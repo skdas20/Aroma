@@ -137,6 +137,8 @@ frontend/build/
 *.db
 *.sqlite
 *.sqlite3
+*.env.db.example
+*.env.example
 
 # Firebase config (if you want to keep it private)
 # firebase-config.js
@@ -145,3 +147,4 @@ frontend/build/
 *.tgz
 *.tar.gz
 .eslintcache
+

@@ -19,7 +19,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null);
   const [cartItemCount, setCartItemCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Demo user ID - in production, get from auth context
   const userId = 'demo-user-1';
@@ -97,9 +98,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  useEffect(() => {
+    useEffect(() => {
     refreshCart();
+    setIsHydrated(true);
   }, []);
+
+    if (!isHydrated) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <CartContext.Provider value={{

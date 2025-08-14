@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Send user data to backend
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('http://localhost:3001/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,17 +71,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }),
       });      if (response.ok) {
         const result = await response.json();
-        console.log('✅ User synced with backend:', result.message);
+        console.log(' User synced with backend:', result.message);
         console.log('📝 Backend user data:', result.user);
         
         // Update user ID with MongoDB ID
         userData.id = result.user.id;
         console.log('🔄 Updated user ID from Firebase UID to MongoDB ID:', userData.id);
       } else {
-        console.error('❌ Failed to sync user with backend');
+        console.error(' Failed to sync user with backend');
       }
     } catch (error) {
-      console.error('❌ Backend sync error:', error);
+      console.error(' Backend sync error:', error);
     }
 
     return userData;
@@ -189,7 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (response.ok) {
           const result = await response.json();
-          console.log('✅ Test user synced with backend:', result.message);
+          console.log(' Test user synced with backend:', result.message);
           
           // Create test user with MongoDB ID
           const testUser: User = {
@@ -201,7 +201,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           setUser(testUser);
         } else {
-          console.error('❌ Failed to sync test user with backend');
+          console.error(' Failed to sync test user with backend');
           // Fallback to local test user
           const testUser: User = {
             id: `test_phone_${phoneNumber.replace(/\D/g, '')}`,
@@ -212,7 +212,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(testUser);
         }
       } catch (error) {
-        console.error('❌ Backend sync error for test user:', error);
+        console.error(' Backend sync error for test user:', error);
         // Fallback to local test user
         const testUser: User = {
           id: `test_phone_${phoneNumber.replace(/\D/g, '')}`,
