@@ -15,7 +15,7 @@ export default function CartPage() {
   const [localLoading, setLocalLoading] = useState(false);
   const router = useRouter();
 
-  const handleUpdateQuantity = async (itemId: number, newQuantity: number) => {
+  const handleUpdateQuantity = async (itemId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     setLocalLoading(true);
     try {
@@ -27,7 +27,7 @@ export default function CartPage() {
     }
   };
 
-  const handleRemoveItem = async (itemId: number) => {
+  const handleRemoveItem = async (itemId: string) => {
     setLocalLoading(true);
     try {
       await removeItem(itemId);
@@ -102,7 +102,7 @@ export default function CartPage() {
             <div className="lg:col-span-2 space-y-4">
               {cart.items.map((item, index) => (
                 <motion.div
-                  key={item.id}
+                  key={item.cartItemId}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
@@ -145,27 +145,27 @@ export default function CartPage() {
                     {/* Quantity Controls */}
                     <div className="flex items-center space-x-3">
                       <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => handleUpdateQuantity(item.cartItemId, item.quantity - 1)}
                         disabled={localLoading || item.quantity <= 1}
-                        className="w-8 h-8 rounded-full bg-gradient-to-r from-golden-200 to-golden-300 flex items-center justify-center hover:from-golden-300 hover:to-golden-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors disabled:opacity-50"
+                        title="Decrease"
                       >
-                        <Minus className="w-4 h-4 text-golden-700" />
+                        <Minus className="w-4 h-4" />
                       </button>
-                      <span className="w-8 text-center font-semibold text-primary-800">
-                        {item.quantity}
-                      </span>
+                      <span className="w-10 text-center font-semibold">{item.quantity}</span>
                       <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => handleUpdateQuantity(item.cartItemId, item.quantity + 1)}
                         disabled={localLoading}
-                        className="w-8 h-8 rounded-full bg-gradient-to-r from-golden-200 to-golden-300 flex items-center justify-center hover:from-golden-300 hover:to-golden-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="p-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors disabled:opacity-50"
+                        title="Increase"
                       >
-                        <Plus className="w-4 h-4 text-golden-700" />
+                        <Plus className="w-4 h-4" />
                       </button>
                     </div>
 
                     {/* Remove Button */}
                     <button
-                      onClick={() => handleRemoveItem(item.id)}
+                      onClick={() => handleRemoveItem(item.cartItemId)}
                       disabled={localLoading}
                       className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Remove item"

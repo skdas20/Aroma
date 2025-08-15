@@ -48,15 +48,16 @@ const perfumes = [
     id: 3,
     name: "Golden Sunset",
     brand: "Aroma Luxury",
-    category: "Unisex",    price: 9212,
+    category: "Unisex",
+    price: 9212,
     originalPrice: 11620,
     image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=500&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=500&fit=crop",
       "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=500&fit=crop",
-      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=500&fit=crop"
+      "https://images.unsplash.com/photo-1617912299539-01a8198934d1?w=400&h=500&fit=crop"
     ],
-    description: "Warm and sophisticated with amber, oud, and spices. A luxurious evening fragrance.",
+    description: "A rich and sophisticated with amber, oud, and spices. A luxurious evening fragrance.",
     notes: {
       top: ["Saffron", "Cardamom", "Orange Blossom"],
       middle: ["Rose", "Oud", "Patchouli"],

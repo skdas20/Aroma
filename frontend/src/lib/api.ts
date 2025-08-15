@@ -32,6 +32,7 @@ export interface Product {
 export interface CartItem extends Product {
   quantity: number;
   addedAt: string;
+  cartItemId: string;
 }
 
 export interface CartSummary {
@@ -86,7 +87,7 @@ export const api = {
     return response.json();
   },
 
-  async addToCart(userId: string, productId: number, quantity: number = 1): Promise<{ success: boolean; message: string; cartItemCount: number }> {
+  async addToCart(userId: string, productId: number, quantity: number = 1): Promise<{ success: boolean; message: string }> {
     const response = await fetch(`${API_BASE_URL}/cart/${userId}/add`, {
       method: 'POST',
       headers: {
@@ -97,8 +98,8 @@ export const api = {
     return response.json();
   },
 
-  async updateCartItem(userId: string, itemId: number, quantity: number): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${API_BASE_URL}/cart/${userId}/update/${itemId}`, {
+  async updateCartItem(userId: string, cartItemId: string, quantity: number): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${API_BASE_URL}/cart/${userId}/update/${cartItemId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -108,8 +109,8 @@ export const api = {
     return response.json();
   },
 
-  async removeFromCart(userId: string, itemId: number): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${API_BASE_URL}/cart/${userId}/remove/${itemId}`, {
+  async removeFromCart(userId: string, cartItemId: string): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${API_BASE_URL}/cart/${userId}/remove/${cartItemId}`, {
       method: 'DELETE',
     });
     return response.json();

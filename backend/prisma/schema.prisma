@@ -21,6 +21,7 @@ model Customer {
   totalExpenditure Decimal  @db.Decimal(12, 2) @default(0) // Total amount spent
 
   orders Order[]
+  cart   Cart?
 }
 
 // Products Table - Maintain information about products available for sale
@@ -42,6 +43,7 @@ model Product {
   reviews       Int
 
   orderProducts OrderProduct[]
+  cartItems     CartItem[]
 }
 
 // Orders Table - Store transaction details of purchases made by customers
@@ -69,5 +71,33 @@ model OrderProduct {
 
   @@id([orderId, productId]) // Composite primary key
   @@index([orderId])
+  @@index([productId])
+}
+
+// Cart Table - Stores items a customer intends to purchase
+model Cart {
+  id        String   @id @default(uuid())
+  customerId String   @unique // Each customer has one cart
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customer Customer   @relation(fields: [customerId], references: [cid], onDelete: Cascade)
+  items    CartItem[]
+
+  @@index([customerId])
+}
+
+// CartItem Table - Junction table for Carts and Products
+model CartItem {
+  id        String @id @default(uuid())
+  cartId    String
+  productId String
+  quantity  Int
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [pid], onDelete: Cascade)
+
+  @@unique([cartId, productId])
+  @@index([cartId])
   @@index([productId])
 }

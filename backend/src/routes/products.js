@@ -23,9 +23,9 @@ router.get('/', async (req, res) => {
     }
 
     // Filter by category
-    if (category && category.toLowerCase() !== 'all') {
+    if (typeof category === 'string' && category.length > 0 && category.toLowerCase() !== 'all') {
       where.category = {
-        equals: category, 
+        equals: category,
         mode: 'insensitive'
       };
     }
@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
 
     res.json({
       success: true,
-      products,
+      products: products.map(p => ({ id: p.numericId, ...p })),
       pagination: {
         page: parseInt(page),
         limit: take,
@@ -103,7 +103,7 @@ router.get('/:pid', async (req, res) => {
 
     res.json({
       success: true,
-      product
+      product: { id: product.numericId, ...product }
     });
   } catch (error) {
     console.error(' Product fetch error:', error);

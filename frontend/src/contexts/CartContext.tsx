@@ -8,8 +8,8 @@ interface CartContextType {
   cartItemCount: number;
   isLoading: boolean;
   addToCart: (productId: number, quantity?: number) => Promise<void>;
-  updateQuantity: (itemId: number, quantity: number) => Promise<void>;
-  removeItem: (itemId: number) => Promise<void>;
+  updateQuantity: (itemId: string, quantity: number) => Promise<void>;
+  removeItem: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   refreshCart: () => Promise<void>;
 }
@@ -45,7 +45,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       const response = await api.addToCart(userId, productId, quantity);
       if (response.success) {
-        setCartItemCount(response.cartItemCount);
         await refreshCart();
       }
     } catch (error) {
@@ -55,7 +54,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateQuantity = async (itemId: number, quantity: number) => {
+    const updateItemQuantity = async (itemId: string, quantity: number) => {
     try {
       setIsLoading(true);
       const response = await api.updateCartItem(userId, itemId, quantity);
@@ -69,7 +68,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const removeItem = async (itemId: number) => {
+    const removeItemFromCart = async (itemId: string) => {
     try {
       setIsLoading(true);
       const response = await api.removeFromCart(userId, itemId);
@@ -113,8 +112,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       cartItemCount,
       isLoading,
       addToCart,
-      updateQuantity,
-      removeItem,
+      updateQuantity: updateItemQuantity,
+      removeItem: removeItemFromCart,
       clearCart,
       refreshCart
     }}>

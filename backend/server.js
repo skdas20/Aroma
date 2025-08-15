@@ -19,6 +19,7 @@ connectDatabase().catch((error) => {
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3002',
+  'http://localhost:3003',
   'http://localhost:3001',
   'https://aroma-blush.vercel.app',
   'https://aroma-ipst.vercel.app',
@@ -32,6 +33,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 // Routes
 app.use('/api/products', require('./src/routes/products'));

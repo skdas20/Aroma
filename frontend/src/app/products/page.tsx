@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from "next/image";
 import { Search, Filter, ShoppingBag, Star, Plus, Minus, Heart } from 'lucide-react';
@@ -37,6 +37,7 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
   const { addToCart, updateQuantity, removeItem, cart } = useCart();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -54,7 +55,9 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
 
   useEffect(() => {
     fetchProducts();
-  }, [selectedCategory, searchTerm, sortBy]);const fetchProducts = async () => {
+  }, [selectedCategory, searchTerm, sortBy]);
+
+  const fetchProducts = async () => {
     try {
       setLoading(true);
       const params: any = {};
@@ -63,31 +66,38 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
       if (sortBy) params.sort = sortBy;
       
       const data = await api.getProducts(params);
-      if (data.success) {
+      if (data && data.success) {
         setProducts(data.products);
+      } else {
+        setProducts([]); // Clear products on failure to render blank state
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+      setProducts([]); // Clear products on failure to render blank state
     } finally {
       setLoading(false);
     }
-  };  const handleAddToCart = async (product: Product) => {
+  };
+
+  const handleAddToCart = async (product: Product) => {
     try {
       await addToCart(product.id, 1);
+      router.push('/cart');
     } catch (error) {
       console.error('Error adding to cart:', error);
     }
   };
 
-  const handleRemoveFromCart = async (productId: number) => {
+    const handleRemoveFromCart = async (productId: number) => {
     try {
       const cartItem = cart?.items.find(item => item.id === productId);
       if (cartItem) {
         if (cartItem.quantity === 1) {
-          await removeItem(cartItem.id);
+          await removeItem(cartItem.cartItemId);
         } else {
-          await updateQuantity(cartItem.id, cartItem.quantity - 1);
+          await updateQuantity(cartItem.cartItemId, cartItem.quantity - 1);
         }
+        router.push('/cart');
       }
     } catch (error) {
       console.error('Error removing from cart:', error);
@@ -174,13 +184,13 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {products.map((product, index) => (
                 <motion.div
-                  key={product.id}
+                  key={`${product.id}-${index}`}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -10 }}
-                  className="bg-gradient-to-br from-cream-50 to-golden-50 rounded-2xl shadow-xl overflow-hidden border-2 border-golden-200 hover:border-golden-400 transition-all group"
-                >                  {/* Product Image */}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group bg-cream-50 rounded-2xl shadow-xl overflow-hidden border border-golden-100 hover:shadow-2xl transition-all hover:-translate-y-1"
+                >
+                  {/* Product Image */}
                   <div className="relative h-64 bg-gradient-to-br from-sky-100 to-nature-100 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>                    <div className="w-full h-full flex items-center justify-center p-4">
                       <Image
