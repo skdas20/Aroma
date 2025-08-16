@@ -13,6 +13,7 @@ export interface Product {
   name: string;
   brand: string;
   category: string;
+  sex: string;
   price: number;
   originalPrice: number;
   image: string;
@@ -53,6 +54,7 @@ export const api = {
   // Products
   async getProducts(params?: {
     category?: string;
+    sex?: string;
     search?: string;
     minPrice?: number;
     maxPrice?: number;
@@ -68,6 +70,24 @@ export const api = {
     }
     
     const response = await fetch(`${API_BASE_URL}/products?${searchParams}`, { cache: 'no-store' });
+    return response.json();
+  },
+
+  async getProductsBySex(sex: string, params?: {
+    page?: number;
+    limit?: number;
+    sort?: string;
+  }): Promise<{ success: boolean; products: Product[]; pagination: any }> {
+    const searchParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/products/sex/${sex}?${searchParams}`, { cache: 'no-store' });
     return response.json();
   },
 

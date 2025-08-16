@@ -31,6 +31,7 @@ model Product {
   name          String
   brand         String
   category      String
+  sex           String    @default("Unisex") // Men, Women, or Unisex
   description   String
   price         Decimal   @db.Decimal(12, 2)
   originalPrice Decimal   @db.Decimal(12, 2)

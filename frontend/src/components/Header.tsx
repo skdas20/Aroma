@@ -34,9 +34,9 @@ export default function Header() {
         { name: 'Bags', href: '#', available: false },
       ]
     },
-    { name: 'Men', href: '/men' },
-    { name: 'Women', href: '/women' },
-    { name: 'Unisex', href: '/products?category=Unisex' },
+    { name: 'For Him', href: '/products?sex=For%20Him' },
+    { name: 'For Her', href: '/products?sex=For%20Her' },
+    { name: 'Unisex', href: '/products?sex=Unisex' },
   ];
 
   const handleSearch = (e: React.FormEvent) => {

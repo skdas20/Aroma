@@ -15,6 +15,7 @@ interface Product {
   name: string;
   brand: string;
   category: string;
+  sex: string;
   price: number;
   originalPrice: number;
   image: string;
@@ -36,7 +37,10 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('name');
-  const { addToCart, updateQuantity, removeItem, cart } = useCart();
+  const [showSuccessMessage, setShowSuccessMessage] = useState<string | null>(null);
+  const [successTimeout, setSuccessTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [cartOperationInProgress, setCartOperationInProgress] = useState<number | null>(null);
+  const { addToCart, updateQuantity, removeItem, cart, isLoading: cartLoading } = useCart();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -44,11 +48,14 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
     // Handle URL search parameters
     const urlSearch = searchParams.get('search');
     const urlCategory = searchParams.get('category');
+    const urlSex = searchParams.get('sex');
     
     if (urlSearch) {
       setSearchTerm(urlSearch);
     }
-    if (urlCategory) {
+    if (urlSex) {
+      setSelectedCategory(urlSex);
+    } else if (urlCategory) {
       setSelectedCategory(urlCategory);
     }
   }, [searchParams]);
@@ -57,17 +64,30 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
     fetchProducts();
   }, [selectedCategory, searchTerm, sortBy]);
 
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      // Clear any pending timeouts
+      if (successTimeout) {
+        clearTimeout(successTimeout);
+      }
+    };
+  }, [successTimeout]);
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
       const params: any = {};
-      if (selectedCategory !== 'All') params.category = selectedCategory;
+      if (selectedCategory !== 'All') params.sex = selectedCategory;
       if (searchTerm) params.search = searchTerm;
       if (sortBy) params.sort = sortBy;
+      
+      console.log('Fetching products with params:', params);
       
       const data = await api.getProducts(params);
       if (data && data.success) {
         setProducts(data.products);
+        console.log('Products fetched:', data.products.length);
       } else {
         setProducts([]); // Clear products on failure to render blank state
       }
@@ -81,26 +101,38 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
 
   const handleAddToCart = async (product: Product) => {
     try {
+      setCartOperationInProgress(product.id);
       await addToCart(product.id, 1);
-      router.push('/cart');
+      // Show success message
+      showSuccessMessageWithTimeout(`${product.name} added to cart!`);
+      // Don't redirect - let user stay on products page
+      // router.push('/cart');
     } catch (error) {
       console.error('Error adding to cart:', error);
+    } finally {
+      setCartOperationInProgress(null);
     }
   };
 
-    const handleRemoveFromCart = async (productId: number) => {
+  const handleRemoveFromCart = async (productId: number) => {
     try {
+      setCartOperationInProgress(productId);
       const cartItem = cart?.items.find(item => item.id === productId);
       if (cartItem) {
         if (cartItem.quantity === 1) {
           await removeItem(cartItem.cartItemId);
+          showSuccessMessageWithTimeout(`${cartItem.name} removed from cart!`);
         } else {
           await updateQuantity(cartItem.cartItemId, cartItem.quantity - 1);
+          showSuccessMessageWithTimeout(`Quantity updated!`);
         }
-        router.push('/cart');
+        // Don't redirect - let user stay on products page
+        // router.push('/cart');
       }
     } catch (error) {
       console.error('Error removing from cart:', error);
+    } finally {
+      setCartOperationInProgress(null);
     }
   };
 
@@ -109,11 +141,32 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
     return cartItem?.quantity || 0;
   };
 
-  const categories = ['All', 'Men', 'Women', 'Unisex'];
+  const showSuccessMessageWithTimeout = (message: string) => {
+    // Clear any existing timeout
+    if (successTimeout) {
+      clearTimeout(successTimeout);
+    }
+    setShowSuccessMessage(message);
+    const newTimeout = setTimeout(() => setShowSuccessMessage(null), 3000);
+    setSuccessTimeout(newTimeout);
+  };
+
+  const categories = ['All', 'For Him', 'For Her', 'Unisex'];
 
   return (
     <div className="min-h-screen bg-luxury-gradient">
       <Header />
+      
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg"
+        >
+          {showSuccessMessage}
+        </motion.div>
+      )}
       
       {/* Products Header */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-sky-50 via-nature-50 to-golden-50">
@@ -133,42 +186,81 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
 
           {/* Filters */}
           <div className="bg-gradient-to-r from-golden-50 to-sky-50 rounded-2xl p-6 shadow-xl border-2 border-golden-200 mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-600" />
-                <input
-                  type="text"
-                  placeholder="Search fragrances..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-cream-50 border-2 border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none"
-                />
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-primary-700">Search</label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-600" />
+                  <input
+                    type="text"
+                    placeholder="Search fragrances..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-cream-50 border-2 border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none"
+                  />
+                </div>
               </div>
 
               {/* Category Filter */}
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3 bg-cream-50 border-2 border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none"
-              >
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-primary-700">Filter by Target Audience</label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-4 py-3 bg-cream-50 border-2 border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none"
+                >
+                  {categories.map(category => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
+                </select>
+              </div>
 
               {/* Sort */}
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-4 py-3 bg-cream-50 border-2 border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none"
-              >
-                <option value="name">Sort by Name</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="rating">Highest Rated</option>
-              </select>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-primary-700">Sort Products</label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="w-full px-4 py-3 bg-cream-50 border-2 border-golden-200 rounded-lg focus:border-golden-400 focus:outline-none"
+                >
+                  <option value="name">Sort by Name</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
             </div>
+            
+            {/* Cart Summary */}
+            {cart && cart.summary.itemCount > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 p-4 bg-gradient-to-r from-primary-50 to-golden-50 rounded-lg border border-primary-200"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <ShoppingBag className="w-5 h-5 text-primary-600" />
+                    <span className="text-primary-700 font-medium">
+                      Cart: {cart.summary.itemCount} items
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-primary-600">Total:</div>
+                    <div className="text-lg font-bold text-primary-800">₹{cart.summary.total}</div>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => router.push('/cart')}
+                    className="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-medium hover:from-primary-600 hover:to-primary-700 transition-all"
+                  >
+                    View Cart
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
           </div>
         </div>
       </section>
@@ -235,6 +327,20 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
                     <h3 className="text-lg font-bold text-primary-800 mb-2 group-hover:text-golden-700 transition-colors">
                       {product.name}
                     </h3>
+                    
+                    {/* Gender Badge */}
+                    <div className="mb-3">
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                        product.sex === 'For Him' 
+                          ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                          : product.sex === 'For Her'
+                          ? 'bg-pink-100 text-pink-700 border border-pink-200'
+                          : 'bg-purple-100 text-purple-700 border border-purple-200'
+                      }`}>
+                        {product.sex}
+                      </span>
+                    </div>
+                    
                     <p className="text-sm text-primary-600 mb-3 line-clamp-2">
                       {product.description}
                     </p>
@@ -290,10 +396,15 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => handleRemoveFromCart(product.id)}
-                            disabled={getCartQuantity(product.id) === 0}
+                            disabled={getCartQuantity(product.id) === 0 || cartOperationInProgress === product.id}
                             className="w-8 h-8 rounded-full bg-gradient-to-r from-red-200 to-red-300 flex items-center justify-center hover:from-red-300 hover:to-red-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Remove from cart"
                           >
-                            <Minus className="w-4 h-4 text-red-700" />
+                            {cartOperationInProgress === product.id ? (
+                              <div className="w-4 h-4 border-2 border-red-700 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <Minus className="w-4 h-4 text-red-700" />
+                            )}
                           </motion.button>
                           
                           <div className="flex flex-col items-center min-w-[60px]">
@@ -309,9 +420,15 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={() => handleAddToCart(product)}
-                            className="w-8 h-8 rounded-full bg-gradient-to-r from-golden-200 to-golden-300 flex items-center justify-center hover:from-golden-300 hover:to-golden-400 transition-all"
+                            disabled={getCartQuantity(product.id) >= product.stock || cartOperationInProgress === product.id}
+                            className="w-8 h-8 rounded-full bg-gradient-to-r from-golden-200 to-golden-300 flex items-center justify-center hover:from-golden-300 hover:to-golden-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Add to cart"
                           >
-                            <Plus className="w-4 h-4 text-golden-700" />
+                            {cartOperationInProgress === product.id ? (
+                              <div className="w-4 h-4 border-2 border-golden-700 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <Plus className="w-4 h-4 text-golden-700" />
+                            )}
                           </motion.button>
                         </div>
                       )}
@@ -322,10 +439,17 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => handleAddToCart(product)}
-                          className="w-full py-3 bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                          disabled={cartOperationInProgress === product.id}
+                          className="w-full py-3 bg-gradient-to-r from-golden-500 to-golden-600 text-cream-50 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <ShoppingBag className="w-5 h-5" />
-                          <span>Add to Cart</span>
+                          {cartOperationInProgress === product.id ? (
+                            <div className="w-5 h-5 border-2 border-cream-50 border-t-transparent rounded-full animate-spin"></div>
+                          ) : (
+                            <>
+                              <ShoppingBag className="w-5 h-5" />
+                              <span>Add to Cart</span>
+                            </>
+                          )}
                         </motion.button>
                       ) : product.stock === 0 ? (
                         <button
@@ -335,6 +459,16 @@ function ProductsWithSearchParams() {  const [products, setProducts] = useState<
                           <ShoppingBag className="w-5 h-5" />
                           <span>Out of Stock</span>
                         </button>
+                      ) : getCartQuantity(product.id) > 0 ? (
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => router.push('/cart')}
+                          className="w-full py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-cream-50 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                        >
+                          <ShoppingBag className="w-5 h-5" />
+                          <span>View Cart ({getCartQuantity(product.id)} items)</span>
+                        </motion.button>
                       ) : null}
                     </div>
                   </div>

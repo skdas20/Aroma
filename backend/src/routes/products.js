@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 // Get all products with filtering, searching, sorting, and pagination
 router.get('/', async (req, res) => {
   try {
-    const { search, category, minPrice, maxPrice, sort, page = 1, limit = 20 } = req.query;
+    const { search, category, sex, minPrice, maxPrice, sort, page = 1, limit = 20 } = req.query;
     const take = parseInt(limit);
     const skip = (parseInt(page) - 1) * take;
     
@@ -30,6 +30,14 @@ router.get('/', async (req, res) => {
       };
     }
 
+    // Filter by sex (Men, Women, Unisex)
+    if (typeof sex === 'string' && sex.length > 0 && sex.toLowerCase() !== 'all') {
+      where.sex = {
+        equals: sex,
+        mode: 'insensitive'
+      };
+    }
+
     // Price range filter
     if (minPrice || maxPrice) {
       where.price = {};
@@ -38,23 +46,25 @@ router.get('/', async (req, res) => {
     }
 
     // Sort products
+    console.log('Sort parameter received:', sort);
     switch (sort) {
-      case 'price-asc':
+      case 'price-low':
         orderBy = { price: 'asc' };
         break;
-      case 'price-desc':
+      case 'price-high':
         orderBy = { price: 'desc' };
         break;
-      case 'name-asc':
+      case 'name':
         orderBy = { name: 'asc' };
         break;
-      case 'name-desc':
-        orderBy = { name: 'desc' };
+      case 'rating':
+        orderBy = { rating: 'desc' };
         break;
       default:
         orderBy = { numericId: 'asc' }; // Default sort by original order
         break;
     }
+    console.log('OrderBy set to:', orderBy);
 
     const [total, products] = await Promise.all([
       prisma.product.count({ where }),
@@ -197,10 +207,78 @@ router.delete('/:pid', async (req, res) => {
       message: 'Product deleted successfully'
     });
   } catch (error) {
-    console.error(' Product deletion error:', error);
+    console.error(' Product update error:', error);
     res.status(500).json({
       success: false,
       message: 'Error deleting product',
+      error: error.message
+    });
+  }
+});
+
+// Get products by sex (Men, Women, Unisex)
+router.get('/sex/:sex', async (req, res) => {
+  try {
+    const { sex } = req.params;
+    const { page = 1, limit = 20, sort } = req.query;
+    const take = parseInt(limit);
+    const skip = (parseInt(page) - 1) * take;
+    
+    let orderBy = {};
+
+    // Sort products
+    console.log('Sex route - Sort parameter received:', sort);
+    switch (sort) {
+      case 'price-low':
+        orderBy = { price: 'asc' };
+        break;
+      case 'price-high':
+        orderBy = { price: 'desc' };
+        break;
+      case 'name':
+        orderBy = { name: 'asc' };
+        break;
+      case 'rating':
+        orderBy = { rating: 'desc' };
+        break;
+      default:
+        orderBy = { numericId: 'asc' };
+        break;
+    }
+    console.log('Sex route - OrderBy set to:', orderBy);
+
+    const [total, products] = await Promise.all([
+      prisma.product.count({ 
+        where: { 
+          sex: { equals: sex, mode: 'insensitive' } 
+        } 
+      }),
+      prisma.product.findMany({
+        where: { 
+          sex: { equals: sex, mode: 'insensitive' } 
+        },
+        orderBy,
+        skip,
+        take
+      })
+    ]);
+
+    res.json({
+      success: true,
+      products: products.map(p => ({ id: p.numericId, ...p })),
+      pagination: {
+        page: parseInt(page),
+        limit: take,
+        total,
+        hasNext: skip + products.length < total,
+        hasPrev: parseInt(page) > 1
+      }
+    });
+  } catch (error) {
+    console.error('Products by sex fetch error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching products by sex',
       error: error.message
     });
   }
